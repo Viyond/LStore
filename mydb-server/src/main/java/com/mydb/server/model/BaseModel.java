@@ -10,6 +10,16 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 
+/**
+ * 功能描述:server's baseModel
+ * @createTime: 2018年1月22日 下午12:28:41
+ * @author: l.sl
+ * @version: 0.1
+ * @lastVersion: 0.1
+ * @updateTime: 2018年1月22日 下午12:28:41
+ * @updateAuthor: lsl
+ * @changesSum:
+ */
 public abstract class BaseModel {
 	
 	protected Logger log=LoggerFactory.getLogger(getClass());

@@ -18,11 +18,13 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 public class IOClient {
-	private Logger log=LoggerFactory.getLogger(getClass());
-	public void startIO(String host,int port){
+	private final static Logger log=LoggerFactory.getLogger(IOClient.class);
+	public static Bootstrap b=null;
+	public static EventLoopGroup group=null;
+	static{
 		EventLoopGroup group = new NioEventLoopGroup();
         try {
-            Bootstrap b = new Bootstrap();
+            b = new Bootstrap();
             b.group(group)
             .channel(NioSocketChannel.class)
             .option(ChannelOption.TCP_NODELAY, true)
@@ -37,13 +39,14 @@ public class IOClient {
                     p.addLast(new IOClientHandler());
                 }
             });
-            ChannelFuture f = b.connect(host, port).sync();
-            log.info("client connect to host:{}, port:{}", host, port);
-            f.channel().closeFuture().sync();
         }catch(Throwable e){
         	log.error("",e);
-        } finally {
-            group.shutdownGracefully();
         }
+	}
+        
+	public void startIO(String host,int port) throws InterruptedException{
+        ChannelFuture f = b.connect(host, port).sync();
+        log.info("client connect to host:{}, port:{}", host, port);
+        f.channel().closeFuture().sync();
 	}
 }
