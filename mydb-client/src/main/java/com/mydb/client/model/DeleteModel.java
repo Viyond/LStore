@@ -9,7 +9,7 @@ public class DeleteModel extends CommandModel{
 
 	public DeleteModel(String key) {
 		super(Consts.CMD.DEL);
-		JSONObject json=Tools.getEmptyJSON();
+		JSONObject json=Tools.getJSON();
 		json.put(KEY, key);
 		setBody(json.toJSONString());
 	}

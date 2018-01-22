@@ -9,8 +9,13 @@ import net.minidev.json.parser.ParseException;
 
 public class Tools {
 	
-	public static JSONObject getEmptyJSON(){
-		return new JSONObject();
+	public static JSONObject getJSON(String ... kv){
+		JSONObject json=new JSONObject();
+		for(int i=0;i<kv.length;i+=2){
+			String key=kv[i],value=i+1>kv.length?null:kv[i+1];
+			json.put(key, value);
+		}
+		return json;
 	}
 	
 	public static JSONArray getEmptyJSONArray(){

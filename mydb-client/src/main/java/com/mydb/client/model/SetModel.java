@@ -9,7 +9,7 @@ public class SetModel extends CommandModel{
 
 	public SetModel(String key, String value) {
 		super(Consts.CMD.SET);
-		JSONObject json=Tools.getEmptyJSON();
+		JSONObject json=Tools.getJSON();
 		json.put(super.KEY, key);
 		json.put(super.VALUE, value);
 		super.setBody(json.toJSONString());

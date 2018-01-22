@@ -13,25 +13,27 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.GetModel;
+import com.mydb.client.model.MGetModel;
+import com.mydb.client.model.ScanModel;
 import com.mydb.client.model.SetModel;
 import com.mydb.client.nio.IOClient;
 import com.mydb.client.pool.CtxResource;
 import com.mydb.client.pool.DBPoolFactory;
+import com.mydb.client.session.Connections;
 
 /**
  * Hello world!
  *
  */
 public class Main {
-	public static GenericObjectPool<CtxResource> pool;
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
     	DBPoolFactory factory=new DBPoolFactory(args[0],Integer.parseInt(args[1]));
     	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
     	confi.setMaxIdle(20);
-    	confi.setMaxTotal(100);
+    	confi.setMaxTotal(50);
     	confi.setMinIdle(5);
-    	pool=new GenericObjectPool<>(factory, confi);
+    	Connections.pool=new GenericObjectPool<>(factory, confi);
     	Scanner scan=new Scanner(System.in);
     	for(;;){
     		System.out.print("请输入指令:");
@@ -51,6 +53,17 @@ public class Main {
     			DeleteModel del=new DeleteModel(pair[1]);
     			del.run();
     			break;
+    		case "mget":
+    			String[] keys=pair[1].split(",");
+    			MGetModel mget=new MGetModel(keys);
+    			Object res=mget.run();
+    			System.out.println(res);
+    			break;
+    		case "scan":
+    			ScanModel sca=new ScanModel(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1"));
+    			Object res2=sca.run();
+    			System.out.println(res2);
+    			break;
     			default:
     				System.out.println("not supported!");
     				continue;
@@ -59,8 +72,8 @@ public class Main {
     	}
     	
 //    	Random ran=new Random();
-//    	AtomicLong num=new AtomicLong(0);
-//    	for(int i=0;i<50;i++){
+//    	AtomicLong num=new AtomicLong(225710000);
+//    	for(int i=0;i<10;i++){
 //    		new Thread(new Runnable() {
 //    			@Override
 //    			public void run() {
@@ -72,10 +85,11 @@ public class Main {
 //    						System.out.println("ind:"+t);
 //    					}
 //    					ind.incrementAndGet();
-//    					/*String key=ran.nextInt(35000000)+"";
+    					
+//    					String key=ran.nextInt(120000000)+"";
 //    					GetModel get=new GetModel(key);
 //    					get.run();
-//    					ind.incrementAndGet();*/
+//    					ind.incrementAndGet();
 //    				}
 //    			}
 //    		}).start();
