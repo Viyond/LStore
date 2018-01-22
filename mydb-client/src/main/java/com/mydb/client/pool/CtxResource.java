@@ -42,7 +42,22 @@ public class CtxResource {
 		}catch(Throwable e){
 			e.printStackTrace();
 		}
-		runLock=null;
-		resultLock=null;
+		try{
+			ctx.channel().close();
+		}catch(Throwable e){
+			e.printStackTrace();
+		}
+		try{
+			runLock.clear();
+			runLock=null;
+		}catch(Throwable e){
+			e.printStackTrace();
+		}
+		try{
+			resultLock.clear();
+			resultLock=null;
+		}catch(Throwable e){
+			e.printStackTrace();
+		}
 	}
 }

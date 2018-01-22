@@ -2,6 +2,8 @@ package com.mydb.client.pool;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mydb.client.nio.IOClient;
 import com.mydb.client.session.ServerSessions;
+import com.mydb.common.beans.DBException;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -50,11 +53,18 @@ public class DBPoolFactory implements PooledObjectFactory<CtxResource>{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				new IOClient().startIO(host, port);
+				try {
+					new IOClient().startIO(host, port);
+				} catch (InterruptedException e) {
+					log.error("",e);
+				}
 			}
 		}).start();
-		//等待返回,这点比较巧妙,想了好久才想到的方案
-		ChannelHandlerContext ctx=loginQuee.take();
+		//等待返回,这点比较巧妙
+		ChannelHandlerContext ctx=loginQuee.poll(10,TimeUnit.SECONDS);
+		if(ctx==null){
+			throw new DBException("获取链接失败:"+host+":"+port);
+		}
 		log.debug(ctx.channel().id().asShortText()+"\t created");
 		CtxResource resource=new CtxResource(ctx);
 		return new DefaultPooledObject<CtxResource>(resource);
