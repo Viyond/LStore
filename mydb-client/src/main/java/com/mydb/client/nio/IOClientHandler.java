@@ -4,10 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.client.dispatch.CMDDispatcher;
 import com.mydb.client.pool.DBPoolFactory;
-import com.mydb.client.session.ServerSessions;
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
-import com.mydb.common.beans.MsgBuilder;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -24,8 +22,6 @@ public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{
 			//为了使用链接次，登录需要在这里做特殊处理
 			}else if(Consts.CMD.AUTH_SUCCESS==cmd){
 				authSuccess(ctx);
-				//登录完成后放入登录队列
-				DBPoolFactory.loginQuee.put(ctx);
 				return;
 			}
 			CMDDispatcher.put(cmd, msg, ctx);
@@ -37,11 +33,9 @@ public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{
 		}
 	}
 	
-	private void authSuccess(ChannelHandlerContext ctx) throws DBException{
-		String id=ctx.channel().id().asShortText();
-		if(!ServerSessions.serverMap.containsKey(id)){
-			ServerSessions.serverMap.put(id,ctx);
-		}
+	private void authSuccess(ChannelHandlerContext ctx) throws InterruptedException{
+		//登录完成后放入登录队列
+		DBPoolFactory.loginQuee.put(ctx);
 	}
 	
 	@Override

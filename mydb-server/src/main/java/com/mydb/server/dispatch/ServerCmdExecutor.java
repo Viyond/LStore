@@ -8,7 +8,9 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
 import com.mydb.server.model.DeleteModel;
+import com.mydb.server.model.DeleteRangeModel;
 import com.mydb.server.model.GetModel;
+import com.mydb.server.model.InfoModel;
 import com.mydb.server.model.MGetModel;
 import com.mydb.server.model.MSetModel;
 import com.mydb.server.model.ScanModel;
@@ -90,6 +92,12 @@ public class ServerCmdExecutor implements Runnable{
 			break;
 		case Consts.CMD.SCAN:
 			new ScanModel(cmdMsg).run();
+			break;
+		case Consts.CMD.DELRANGE:
+			new DeleteRangeModel(cmdMsg).run();
+			break;
+		case Consts.CMD.INFO:
+			new InfoModel(cmdMsg).run();
 			break;
 		default:
 			throw new DBException("not support yet!");

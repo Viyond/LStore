@@ -75,9 +75,6 @@ public class ClientCmdExecutor implements Runnable{
 	}
 	
 	private void doOp() throws DBException{
-		if(cmdMsg.getMsg().getSTATUS()==Consts.STATUS.NOTOK){
-			throw new DBException("exception:"+cmdMsg.getMsg().getBODY());
-		}
 		String body=cmdMsg.getMsg().getBODY();
 		String id=cmdMsg.getCtx().channel().id().asShortText();
 		BlockingQueue<Object> resultLock=ServerSessions.resultCommandMap.get(id);
@@ -99,11 +96,5 @@ public class ClientCmdExecutor implements Runnable{
 	
 	private void run(CMDMsg cmdMsg) throws DBException{
 		cmdMsg.getCtx().writeAndFlush(MsgBuilder.getMsg(Consts.CMD.RUN));
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

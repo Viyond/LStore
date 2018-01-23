@@ -2,7 +2,6 @@ package com.mydb.client.model;
 
 import java.util.concurrent.TimeUnit;
 import com.mydb.client.pool.CtxResource;
-import com.mydb.client.session.Connections;
 import com.mydb.client.session.ServerSessions;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
@@ -69,7 +68,7 @@ public class CommandModel {
 	public Object run(){
 		CtxResource resource=null;
 		try {
-			resource=Connections.pool.borrowObject(60000);
+			resource=ServerSessions.pool.borrowObject(10000);
 			beforeProcess(resource);
 			process(resource);
 			return afterProcess(resource);
@@ -79,7 +78,7 @@ public class CommandModel {
 		}finally{
 			if(resource!=null){
 				//在归还资源时统一在里面去释放资源
-				Connections.pool.returnObject(resource);
+				ServerSessions.pool.returnObject(resource);
 			}
 		}
 	}

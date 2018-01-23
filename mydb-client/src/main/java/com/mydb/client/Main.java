@@ -1,25 +1,20 @@
 package com.mydb.client;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import com.mydb.client.model.DeleteModel;
-import com.mydb.client.model.GetModel;
-import com.mydb.client.model.MGetModel;
-import com.mydb.client.model.ScanModel;
-import com.mydb.client.model.SetModel;
+import com.mydb.client.model.MSetModel;
 import com.mydb.client.nio.IOClient;
-import com.mydb.client.pool.CtxResource;
 import com.mydb.client.pool.DBPoolFactory;
-import com.mydb.client.session.Connections;
+import com.mydb.client.session.ServerSessions;
 
 /**
  * Hello world!
@@ -33,94 +28,43 @@ public class Main {
     	confi.setMaxIdle(20);
     	confi.setMaxTotal(50);
     	confi.setMinIdle(5);
-    	Connections.pool=new GenericObjectPool<>(factory, confi);
-    	Scanner scan=new Scanner(System.in);
-    	for(;;){
-    		try{
-	    		System.out.print("请输入指令:");
-	    		String str=scan.nextLine();
-	    		String[] pair=str.split(" ");
-	    		long begin=System.currentTimeMillis();
-	    		switch(pair[0]){
-	    		case "get":
-	    			GetModel get=new GetModel(pair[1]);
-	    			System.out.println(get.run());
-	    			break;
-	    		case "set":
-	    			SetModel set=new SetModel(pair[1], pair[2]);
-	    			set.run();
-	    			break;
-	    		case "del":
-	    			DeleteModel del=new DeleteModel(pair[1]);
-	    			del.run();
-	    			break;
-	    		case "mget":
-	    			String[] keys=pair[1].split(",");
-	    			MGetModel mget=new MGetModel(keys);
-	    			Object res=mget.run();
-	    			System.out.println(res);
-	    			break;
-	    		case "scan":
-	    			ScanModel sca=new ScanModel(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1"));
-	    			Object res2=sca.run();
-	    			System.out.println(res2);
-	    			break;
-	    			default:
-	    				System.out.println("not supported!");
-	    				continue;
-	    		}
-	    		System.out.println("cost "+(System.currentTimeMillis()-begin));
-    		}catch(Throwable e){
-    			e.printStackTrace();
-    			System.out.println();
-    		}
+    	ServerSessions.pool=new GenericObjectPool<>(factory, confi);
+    	AtomicLong num=new AtomicLong(1000000000);
+    	for(int i=0;i<10;i++){
+    		new Thread(new Runnable() {
+    			@Override
+    			public void run() {
+    				for(int i=0;i<10000;i++){
+    					Map<String, Object> map=new HashMap<>();
+        				for(int j=0;j<1000;j++){
+        					long t=num.incrementAndGet();
+        					map.put("0000000000000000000000"+t, UUID.randomUUID().toString()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID());
+        				}
+        				long begin=System.currentTimeMillis();
+        				MSetModel mset=new MSetModel(map);
+        				mset.run();
+        				System.out.println("cost:"+(System.currentTimeMillis()-begin));
+        				ind.incrementAndGet();
+    				}
+    			}
+    		}).start();
     	}
+    	new Timer().schedule(new TimerTask() {
+    		int t=ind.get();
+			@Override
+			public void run() {
+				int tt=ind.get();
+				System.out.println("QPS:"+(tt-t));
+				t=tt;
+			}
+		}, 1000,1000);
     	
-//    	Random ran=new Random();
-//    	AtomicLong num=new AtomicLong(Long.parseLong(args[2]));
-//    	long end=Long.parseLong(args[3]);
-//    	for(int i=0;i<10;i++){
-//    		new Thread(new Runnable() {
-//    			@Override
-//    			public void run() {
-//    				while(ind.get()<=end){
-    					/*long t=num.incrementAndGet();
-    					SetModel set=new SetModel(t+"",UUID.randomUUID().toString());
-    					set.run();
-    					if(t%10000==0){
-    						System.out.println("ind:"+t);
-    					}
-    					ind.incrementAndGet();*/
-    					
-//    					String key=ran.nextInt(900000000)+"";
-//    					GetModel get=new GetModel(key);
-//    					get.run();
-//    					ind.incrementAndGet();
-    					
-//    					ScanModel sca=new ScanModel(ran.nextInt(900000000)+"");
-//    					sca.run();
-//    					ind.incrementAndGet();
-    					
-//    				}
-//    			}
-//    		}).start();
-//    	}
-//    	new Timer().schedule(new TimerTask() {
-//    		int t=ind.get();
-//			@Override
-//			public void run() {
-//				int tt=ind.get();
-//				System.out.println("QPS:"+(tt-t));
-//				t=tt;
-//			}
-//		}, 1000,1000);
-//    	
-//    	//shutdown hook
-//    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				IOClient.group.shutdownGracefully();
-//			}
-//		}));
+    	//shutdown hook
+    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				IOClient.group.shutdownGracefully();
+			}
+		}));
     }
 }
