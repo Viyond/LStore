@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.commons.pool2.impl.GenericObjectPool;
+
+import com.mydb.client.pool.CtxResource;
 import com.mydb.common.beans.DBException;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -18,13 +22,6 @@ import io.netty.channel.ChannelHandlerContext;
  * @changesSum:
  */
 public class ServerSessions {
-	public final static Map<String, ChannelHandlerContext> serverMap=new ConcurrentHashMap<>();
 	public final static Map<String, BlockingQueue<Object>> resultCommandMap=new ConcurrentHashMap<>(50);
-	
-	public static ChannelHandlerContext getServer() throws DBException{
-		if(serverMap.isEmpty()){
-			throw new DBException("server all lost!");
-		}
-		return serverMap.values().iterator().next();
-	}
+	public static GenericObjectPool<CtxResource> pool;
 }

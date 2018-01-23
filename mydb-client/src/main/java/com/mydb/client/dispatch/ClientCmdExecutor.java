@@ -96,11 +96,5 @@ public class ClientCmdExecutor implements Runnable{
 	
 	private void run(CMDMsg cmdMsg) throws DBException{
 		cmdMsg.getCtx().writeAndFlush(MsgBuilder.getMsg(Consts.CMD.RUN));
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
