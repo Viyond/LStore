@@ -1,23 +1,19 @@
 package com.mydb.client;
 
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
 import com.mydb.client.model.DeleteModel;
+import com.mydb.client.model.DeleteRangeModel;
 import com.mydb.client.model.GetModel;
+import com.mydb.client.model.InfoModel;
 import com.mydb.client.model.MGetModel;
+import com.mydb.client.model.MSetModel;
 import com.mydb.client.model.ScanModel;
 import com.mydb.client.model.SetModel;
-import com.mydb.client.nio.IOClient;
-import com.mydb.client.pool.CtxResource;
 import com.mydb.client.pool.DBPoolFactory;
 import com.mydb.client.session.Connections;
 
@@ -65,6 +61,29 @@ public class Main {
 	    			Object res2=sca.run();
 	    			System.out.println(res2);
 	    			break;
+	    		case "mset":
+	    			Map<String, Object> data=new HashMap<>();
+	    			for(int i=1;i<pair.length-1;i+=2){
+	    				data.put(pair[i], pair[i+1]);
+	    			}
+	    			MSetModel mset=new MSetModel(data);
+	    			Object msetres=mset.run();
+	    			System.out.println(msetres);
+	    			break;
+	    		case "rdel":
+	    			DeleteRangeModel rdel=new DeleteRangeModel(pair[1], pair[2]);
+	    			Object rdelres=rdel.run();
+	    			System.out.println(rdelres);
+	    			break;
+	    		case "info":
+	    			/*
+	    			 	"rocksdb.num-files-at-level<N>" - return the number of files at level <N>, where <N> is an ASCII representation of a level number (e.g. "0"). 
+						"rocksdb.stats" - returns a multi-line string that describes statistics about the internal operation of the DB. 
+						"rocksdb.sstables" - returns a multi-line string that describes all of the sstables that make up the db contents. 
+	    			 */
+	    			InfoModel info=new InfoModel(pair[1]);
+	    			System.out.println(info.run());
+	    			break;
 	    			default:
 	    				System.out.println("not supported!");
 	    				continue;
@@ -84,6 +103,11 @@ public class Main {
 //    			@Override
 //    			public void run() {
 //    				while(ind.get()<=end){
+//    					long t=num.incrementAndGet();
+//    					DeleteModel del=new DeleteModel(t+"");
+//    					del.run();
+//    					ind.incrementAndGet();
+    					
     					/*long t=num.incrementAndGet();
     					SetModel set=new SetModel(t+"",UUID.randomUUID().toString());
     					set.run();
@@ -100,7 +124,7 @@ public class Main {
 //    					ScanModel sca=new ScanModel(ran.nextInt(900000000)+"");
 //    					sca.run();
 //    					ind.incrementAndGet();
-    					
+//    					
 //    				}
 //    			}
 //    		}).start();
@@ -114,8 +138,8 @@ public class Main {
 //				t=tt;
 //			}
 //		}, 1000,1000);
-//    	
-//    	//shutdown hook
+    	
+    	//shutdown hook
 //    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 //			@Override
 //			public void run() {

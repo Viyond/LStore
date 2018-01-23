@@ -1,5 +1,6 @@
 package com.mydb.server.model;
 
+import org.rocksdb.RocksDBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.common.beans.CMDMsg;
@@ -9,7 +10,6 @@ import com.mydb.common.beans.Tools;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import io.netty.channel.ChannelHandlerContext;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.ParseException;
 
 /**
  * 功能描述:server's baseModel
@@ -54,12 +54,15 @@ public abstract class BaseModel {
 			this.beforeProcess();
 			this.afterSuccessProcess(process());
 		}catch(Throwable e){
-			this.afterUnsuccessProcess(e.getMessage());
+			log.error("",e);
+			jbody.put("ex",e.getMessage());
+			jbody.put("cmd",cmd);
+			jbody.put("type",type);
+			this.afterUnsuccessProcess();
 		}
 	}
 	
-	protected void beforeProcess(){
-		
+	protected void beforeProcess() throws RocksDBException{
 	}
 	protected abstract Object process() throws Exception,DBException;
 	
@@ -67,8 +70,8 @@ public abstract class BaseModel {
 		ctx.writeAndFlush(MsgBuilder.getOpMsg(cmd, res.toString()));
 	}
 	
-	protected void afterUnsuccessProcess(String exmsg){
-		ctx.writeAndFlush(MsgBuilder.getExceptionOpMsg(cmd, exmsg));
+	protected void afterUnsuccessProcess(){
+		ctx.writeAndFlush(MsgBuilder.getExceptionOpMsg(cmd,jbody.toJSONString()));
 	}
 	
 }

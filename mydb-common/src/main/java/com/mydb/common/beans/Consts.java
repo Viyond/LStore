@@ -17,7 +17,7 @@ public interface Consts {
 		/**
 		 * 1000-9999 APPLICATION
 		 */
-		public int SET=1000,GET=1001,MSET=1002,MGET=1003,DEL=1004,SCAN=1005;
+		public int SET=1000,GET=1001,MSET=1002,MGET=1003,DEL=1004,SCAN=1005,DELRANGE=1006,INFO=1007;
 		public BitSet CMDS=new BitSet(){{
 			set(UNDONE);
 			set(DONE);
@@ -34,6 +34,8 @@ public interface Consts {
 			set(MGET);
 			set(DEL);
 			set(SCAN);
+			set(DELRANGE);
+			set(INFO);
 		}};
 	}
 	
