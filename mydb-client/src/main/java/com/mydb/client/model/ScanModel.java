@@ -20,6 +20,11 @@ public class ScanModel extends CommandModel{
 		assemble(key, 10, asc);
 	}
 	
+	public ScanModel(String key){
+		super(Consts.CMD.SCAN);
+		assemble(key, 10, true);
+	}
+	
 	private void assemble(String key,int limit,boolean asc){
 		if(limit<0){
 			limit=10;

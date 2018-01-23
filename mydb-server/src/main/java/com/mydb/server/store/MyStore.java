@@ -5,8 +5,8 @@ import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 
 public class MyStore {
-	private final static String dbpath="D://rocksdb";
-	//private final static String dbpath="/root/rocks";
+	//private final static String dbpath="D://rocksdb";
+	private final static String dbpath="/root/rocks";
 	public static RocksDB db;
 	static{
 		final String db_path = dbpath;
