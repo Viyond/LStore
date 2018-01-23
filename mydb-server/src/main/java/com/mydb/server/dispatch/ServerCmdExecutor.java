@@ -9,6 +9,9 @@ import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
 import com.mydb.server.model.DeleteModel;
 import com.mydb.server.model.GetModel;
+import com.mydb.server.model.MGetModel;
+import com.mydb.server.model.MSetModel;
+import com.mydb.server.model.ScanModel;
 import com.mydb.server.model.SetModel;
 import com.mydb.server.session.ClientSessions;
 import io.netty.channel.ChannelHandlerContext;
@@ -77,11 +80,16 @@ public class ServerCmdExecutor implements Runnable{
 			new GetModel(cmdMsg).run();
 			break;
 		case Consts.CMD.MSET:
+			new MSetModel(cmdMsg).run();
 			break;
 		case Consts.CMD.MGET:
+			new MGetModel(cmdMsg).run();
 			break;
 		case Consts.CMD.DEL:
 			new DeleteModel(cmdMsg).run();
+			break;
+		case Consts.CMD.SCAN:
+			new ScanModel(cmdMsg).run();
 			break;
 		default:
 			throw new DBException("not support yet!");

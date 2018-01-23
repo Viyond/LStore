@@ -1,17 +1,11 @@
 package com.mydb.client.model;
 
 import java.util.concurrent.TimeUnit;
-
-import com.mydb.client.Main;
-import com.mydb.client.dispatch.CMDDispatcher;
 import com.mydb.client.pool.CtxResource;
+import com.mydb.client.session.Connections;
 import com.mydb.client.session.ServerSessions;
-import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
-
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 
 /**
  * 功能描述:客户端command发送
@@ -27,7 +21,7 @@ public class CommandModel {
 	
 	private int cmd;
 	private String body,desc;
-	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs";
+	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs",OTHER="o";
 	
 	public CommandModel(int cmd) {
 		super();
@@ -75,7 +69,7 @@ public class CommandModel {
 	public Object run(){
 		CtxResource resource=null;
 		try {
-			resource=Main.pool.borrowObject(60000);
+			resource=Connections.pool.borrowObject(60000);
 			beforeProcess(resource);
 			process(resource);
 			return afterProcess(resource);
@@ -85,7 +79,7 @@ public class CommandModel {
 		}finally{
 			if(resource!=null){
 				//在归还资源时统一在里面去释放资源
-				Main.pool.returnObject(resource);
+				Connections.pool.returnObject(resource);
 			}
 		}
 	}

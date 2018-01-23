@@ -13,69 +13,94 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.GetModel;
+import com.mydb.client.model.MGetModel;
+import com.mydb.client.model.ScanModel;
 import com.mydb.client.model.SetModel;
 import com.mydb.client.nio.IOClient;
 import com.mydb.client.pool.CtxResource;
 import com.mydb.client.pool.DBPoolFactory;
+import com.mydb.client.session.Connections;
 
 /**
  * Hello world!
  *
  */
 public class Main {
-	public static GenericObjectPool<CtxResource> pool;
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
     	DBPoolFactory factory=new DBPoolFactory(args[0],Integer.parseInt(args[1]));
     	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
     	confi.setMaxIdle(20);
-    	confi.setMaxTotal(100);
+    	confi.setMaxTotal(50);
     	confi.setMinIdle(5);
-    	pool=new GenericObjectPool<>(factory, confi);
+    	Connections.pool=new GenericObjectPool<>(factory, confi);
     	Scanner scan=new Scanner(System.in);
     	for(;;){
-    		System.out.print("请输入指令:");
-    		String str=scan.nextLine();
-    		String[] pair=str.split(" ");
-    		long begin=System.currentTimeMillis();
-    		switch(pair[0]){
-    		case "get":
-    			GetModel get=new GetModel(pair[1]);
-    			System.out.println(get.run());
-    			break;
-    		case "set":
-    			SetModel set=new SetModel(pair[1], pair[2]);
-    			set.run();
-    			break;
-    		case "del":
-    			DeleteModel del=new DeleteModel(pair[1]);
-    			del.run();
-    			break;
-    			default:
-    				System.out.println("not supported!");
-    				continue;
+    		try{
+	    		System.out.print("请输入指令:");
+	    		String str=scan.nextLine();
+	    		String[] pair=str.split(" ");
+	    		long begin=System.currentTimeMillis();
+	    		switch(pair[0]){
+	    		case "get":
+	    			GetModel get=new GetModel(pair[1]);
+	    			System.out.println(get.run());
+	    			break;
+	    		case "set":
+	    			SetModel set=new SetModel(pair[1], pair[2]);
+	    			set.run();
+	    			break;
+	    		case "del":
+	    			DeleteModel del=new DeleteModel(pair[1]);
+	    			del.run();
+	    			break;
+	    		case "mget":
+	    			String[] keys=pair[1].split(",");
+	    			MGetModel mget=new MGetModel(keys);
+	    			Object res=mget.run();
+	    			System.out.println(res);
+	    			break;
+	    		case "scan":
+	    			ScanModel sca=new ScanModel(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1"));
+	    			Object res2=sca.run();
+	    			System.out.println(res2);
+	    			break;
+	    			default:
+	    				System.out.println("not supported!");
+	    				continue;
+	    		}
+	    		System.out.println("cost "+(System.currentTimeMillis()-begin));
+    		}catch(Throwable e){
+    			e.printStackTrace();
+    			System.out.println();
     		}
-    		System.out.println("cost "+(System.currentTimeMillis()-begin));
     	}
     	
 //    	Random ran=new Random();
-//    	AtomicLong num=new AtomicLong(0);
-//    	for(int i=0;i<50;i++){
+//    	AtomicLong num=new AtomicLong(Long.parseLong(args[2]));
+//    	long end=Long.parseLong(args[3]);
+//    	for(int i=0;i<10;i++){
 //    		new Thread(new Runnable() {
 //    			@Override
 //    			public void run() {
-//    				while(ind.get()<400000000){
-//    					long t=num.incrementAndGet();
-//    					SetModel set=new SetModel(t+"",UUID.randomUUID().toString());
-//    					set.run();
-//    					if(t%10000==0){
-//    						System.out.println("ind:"+t);
-//    					}
-//    					ind.incrementAndGet();
-//    					/*String key=ran.nextInt(35000000)+"";
+//    				while(ind.get()<=end){
+    					/*long t=num.incrementAndGet();
+    					SetModel set=new SetModel(t+"",UUID.randomUUID().toString());
+    					set.run();
+    					if(t%10000==0){
+    						System.out.println("ind:"+t);
+    					}
+    					ind.incrementAndGet();*/
+    					
+//    					String key=ran.nextInt(900000000)+"";
 //    					GetModel get=new GetModel(key);
 //    					get.run();
-//    					ind.incrementAndGet();*/
+//    					ind.incrementAndGet();
+    					
+//    					ScanModel sca=new ScanModel(ran.nextInt(900000000)+"");
+//    					sca.run();
+//    					ind.incrementAndGet();
+    					
 //    				}
 //    			}
 //    		}).start();

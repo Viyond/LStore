@@ -75,6 +75,9 @@ public class ClientCmdExecutor implements Runnable{
 	}
 	
 	private void doOp() throws DBException{
+		if(cmdMsg.getMsg().getSTATUS()==Consts.STATUS.NOTOK){
+			throw new DBException("exception:"+cmdMsg.getMsg().getBODY());
+		}
 		String body=cmdMsg.getMsg().getBODY();
 		String id=cmdMsg.getCtx().channel().id().asShortText();
 		BlockingQueue<Object> resultLock=ServerSessions.resultCommandMap.get(id);

@@ -31,9 +31,9 @@ public class SetModel extends BaseModel {
 	@Override
 	public Object process() throws DBException, RocksDBException {
 		MyStore.db.put(key.getBytes(), value.toString().getBytes());
-		JSONObject jo=Tools.getEmptyJSON();
+		JSONObject jo=Tools.getJSON();
 		jo.put(super.KEY, key);
 		jo.put(super.VALUE, value);
-		return jo.toJSONString();
+		return jo;
 	}
 }
