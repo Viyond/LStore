@@ -5,7 +5,7 @@ import com.mydb.common.beans.Tools;
 
 import net.minidev.json.JSONObject;
 
-public class DeleteModel extends CommandModel{
+public class DeleteModel extends BaseModel{
 
 	public DeleteModel(String key) {
 		super(Consts.CMD.DEL);

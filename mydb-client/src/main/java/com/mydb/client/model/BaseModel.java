@@ -17,14 +17,14 @@ import com.mydb.common.beans.MsgBuilder;
  * @updateAuthor: lsl
  * @changesSum:
  */
-public class CommandModel {
+public class BaseModel {
 	
 	private int cmd;
 	private String body,desc;
 	private final static int borrowTimeout=Configs.getInteger("borrow.timeout"),executeTimeout=Configs.getInteger("execute.timeout");
 	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs",OTHER="o";
 	
-	public CommandModel(int cmd) {
+	public BaseModel(int cmd) {
 		super();
 		this.cmd = cmd;
 	}

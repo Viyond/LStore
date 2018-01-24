@@ -5,7 +5,7 @@ import com.mydb.common.beans.Tools;
 
 import net.minidev.json.JSONObject;
 
-public class SetModel extends CommandModel{
+public class SetModel extends BaseModel{
 
 	public SetModel(String key, String value) {
 		super(Consts.CMD.SET);

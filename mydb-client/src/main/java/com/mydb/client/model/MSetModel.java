@@ -16,7 +16,7 @@ import net.minidev.json.JSONObject;
  * @updateAuthor: l.sl
  * @changesSum:
  */
-public class MSetModel extends CommandModel{
+public class MSetModel extends BaseModel{
 
 	public MSetModel(Map<String, Object> values) {
 		super(Consts.CMD.MSET);

@@ -30,28 +30,36 @@ public class Main {
 	public static AtomicInteger ind=new AtomicInteger(0);
 	static int k=0;
     public static void main( String[] args ) throws Exception{
-    	DBPoolFactory factory=new DBPoolFactory(Configs.get("bind"),Configs.getInteger("port"),Configs.getInteger("auth.expire"));
-    	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
-    	confi.setMaxIdle(Configs.getInteger("maxidle"));
-    	confi.setMaxTotal(Configs.getInteger("maxtotal"));
-    	confi.setMinIdle(Configs.getInteger("minidle"));
-    	ServerSessions.pool=new GenericObjectPool<>(factory, confi);
     	AtomicLong num=new AtomicLong(0);
     	Random ran=new Random();
     	long seed=1010000000;
-    	for(int i=0;i<20;i++){
+    	for(int i=0;i<10;i++){
     		new Thread(new Runnable() {
     			@Override
     			public void run() {
     				while(true){
-    					//String key="0000000000000000000000"+(seed+ran.nextInt(300000000));
-    					String key="0000000000000000000000"+(seed+(k++));
-//    					ScanModel scan=new ScanModel(key,10);
-//    					scan.run();
-    					//System.out.println();
+    					String key="0000000000000000000000"+(seed+ran.nextInt(19999999));
+//    					for(int i=0;i<1000;i++){
+//    						long begin=System.currentTimeMillis();
+//    						Map<String, Object> res=new HashMap<>();
+//    						for(int j=0;j<10000;j++){
+//    							String key="0000000000000000000000"+(seed+(k++));
+//    							res.put(key, UUID.randomUUID().toString()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID());
+//    						}
+//    						MSetModel mset=new MSetModel(res);
+//    						mset.run();
+//    						ind.incrementAndGet();
+//    						System.out.println("cost:"+(System.currentTimeMillis()-begin));
+//    					}
+//    					break;
+    					
     					GetModel get=new GetModel(key);
     					get.run();
+    					
+//    					ScanModel scan=new ScanModel(key,10);
+//    					scan.run();
     					ind.incrementAndGet();
+    					//System.out.println();
     					/*Map<String, Object> vals=new HashMap<>();
     					for(int i=0;i<100;i++){
     						long tv=num.getAndIncrement();

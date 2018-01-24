@@ -4,7 +4,7 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.Tools;
 import net.minidev.json.JSONObject;
 
-public class ScanModel extends CommandModel{
+public class ScanModel extends BaseModel{
 	public ScanModel(String key,int limit,boolean asc) {
 		super(Consts.CMD.SCAN);
 		assemble(key, limit, asc);

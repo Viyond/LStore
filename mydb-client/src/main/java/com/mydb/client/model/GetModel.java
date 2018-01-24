@@ -5,7 +5,7 @@ import com.mydb.common.beans.Tools;
 
 import net.minidev.json.JSONObject;
 
-public class GetModel extends CommandModel{
+public class GetModel extends BaseModel{
 
 	public GetModel(String key) {
 		super(Consts.CMD.GET);

@@ -20,7 +20,7 @@ import net.minidev.json.JSONObject;
  * @updateAuthor: lsl
  * @changesSum:
  */
-public class MGetModel extends CommandModel{
+public class MGetModel extends BaseModel{
 
 	public MGetModel(String ... keys) {
 		super(Consts.CMD.MGET);

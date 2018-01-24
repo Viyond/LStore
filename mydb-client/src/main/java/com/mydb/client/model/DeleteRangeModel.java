@@ -13,7 +13,7 @@ import com.mydb.common.beans.Tools;
  * @updateAuthor: l.sl
  * @changesSum:
  */
-public class DeleteRangeModel extends CommandModel {
+public class DeleteRangeModel extends BaseModel {
 	/**
 	 * [begin,end)
 	 * @param begin include

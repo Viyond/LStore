@@ -13,7 +13,7 @@ import com.mydb.common.beans.Tools;
  * @updateAuthor: l.sl
  * @changesSum:
  */
-public class InfoModel extends CommandModel {
+public class InfoModel extends BaseModel {
 
 	public InfoModel(String propertiy) {
 		super(Consts.CMD.INFO);
