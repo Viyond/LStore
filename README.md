@@ -11,3 +11,5 @@ the LStore base on rocksdb with netty protocol,and easy to use,and of course,bil
 | mset  | set key-value pairs into store base | transactions guaranteed |
 | scan  | scan data from store base with given key-prefix | 10000 records per time  |
 | delete  | delete key-value pair with given key  | no limits |
+| deleteRange | delete data by given range  | never try to delete range from begin to end while stored billions of data  |
+| info  | get informateions of store base | no limits |
