@@ -6,19 +6,19 @@ import org.rocksdb.RocksDBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mydb.common.beans.Configs;
+
 public class MyStore {
-	//private final static String dbpath="D://rocksdb";
 	private final static Logger log=LoggerFactory.getLogger(MyStore.class);
-	private final static String dbpath="/root/rocks";
 	public static RocksDB db;
 	static{
-		final String db_path = dbpath;
 		final Options options = new Options();
 		options.setCreateIfMissing(true);
 		options.setCreateMissingColumnFamilies(true);
 		try {
+			String db_path=Configs.get("dbpath");
 			db = RocksDB.open(options,db_path);
-			log.info("DB inited.Base Path:{}",dbpath);
+			log.info("DB inited.Base Path:{}",db_path);
 		} catch (RocksDBException e) {
 			e.printStackTrace();
 			log.error("",e);

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.mydb.common.beans.Configs;
 import com.mydb.common.beans.ThreadPool;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -13,6 +14,7 @@ public class ClientSessions{
 	public final static Map<String,Long> connectionMap=new ConcurrentHashMap<>(100);
 	public final static Map<String,ChannelHandlerContext> connectionChannelMap=new ConcurrentHashMap<>(100);
 	public final static Map<String, ChannelHandlerContext> sessionMap=new ConcurrentHashMap<>();
+	private static int expreTime= Configs.getInteger("auth.expire"),checkGap=Configs.getInteger("auth.check.interval");
 	static{
 		ThreadPool.getInstance().submit(new Runnable() {
 			@Override
@@ -21,7 +23,7 @@ public class ClientSessions{
 					try{
 						long now=System.currentTimeMillis();
 						for(Entry<String, Long> e : connectionMap.entrySet()){
-							if(now-e.getValue()>60000){
+							if(now-e.getValue()>expreTime){
 								String key=e.getKey();
 								//从登录map中移除
 								connectionMap.remove(key);
@@ -34,7 +36,7 @@ public class ClientSessions{
 								}
 							}
 						}
-						Thread.sleep(3000);
+						Thread.sleep(checkGap);
 					}catch(Throwable e){
 						e.printStackTrace();
 						continue;

@@ -34,8 +34,10 @@ public class IOServerHandler extends SimpleChannelInboundHandler<IOMsg>{
 		super.channelActive(ctx);
 		//设置session到Map
 		String id=ctx.channel().id().asShortText();
-		ClientSessions.connectionMap.put(id, System.currentTimeMillis());
-		ClientSessions.connectionChannelMap.put(id, ctx);
+		if(!ClientSessions.connectionMap.containsKey(id)){
+			ClientSessions.connectionMap.put(id, System.currentTimeMillis());
+			ClientSessions.connectionChannelMap.put(id, ctx);
+		}
 		//发送登录指令
 		ctx.writeAndFlush(MsgBuilder.getMsg(Consts.CMD.TO_AUTH));
 	}

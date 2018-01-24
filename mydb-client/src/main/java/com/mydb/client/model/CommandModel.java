@@ -3,6 +3,7 @@ package com.mydb.client.model;
 import java.util.concurrent.TimeUnit;
 import com.mydb.client.pool.CtxResource;
 import com.mydb.client.session.ServerSessions;
+import com.mydb.common.beans.Configs;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
 
@@ -20,6 +21,7 @@ public class CommandModel {
 	
 	private int cmd;
 	private String body,desc;
+	private final static int borrowTimeout=Configs.getInteger("borrow.timeout"),executeTimeout=Configs.getInteger("execute.timeout");
 	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs",OTHER="o";
 	
 	public CommandModel(int cmd) {
@@ -42,7 +44,7 @@ public class CommandModel {
 	}
 	
 	private Object afterProcess(CtxResource resource) throws InterruptedException, DBException{
-		Object res=resource.getResultLock().poll(10, TimeUnit.SECONDS);
+		Object res=resource.getResultLock().poll(executeTimeout, TimeUnit.SECONDS);
 		if(res==null){
 			throw new DBException("获取失败!");
 		}
@@ -68,7 +70,7 @@ public class CommandModel {
 	public Object run(){
 		CtxResource resource=null;
 		try {
-			resource=ServerSessions.pool.borrowObject(10000);
+			resource=ServerSessions.pool.borrowObject(borrowTimeout);
 			beforeProcess(resource);
 			process(resource);
 			return afterProcess(resource);

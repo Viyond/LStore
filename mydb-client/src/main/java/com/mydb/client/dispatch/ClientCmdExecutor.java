@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.mydb.client.Main;
 import com.mydb.client.session.ServerSessions;
 import com.mydb.common.beans.CMDMsg;
+import com.mydb.common.beans.Configs;
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
@@ -91,7 +92,7 @@ public class ClientCmdExecutor implements Runnable{
 	}
 	
 	private void doAuth(CMDMsg cmdMsg) throws DBException{
-		cmdMsg.getCtx().writeAndFlush(MsgBuilder.getMsg(Consts.CMD.AUTH,"202CB962AC59075B964B07152D234B70"));
+		cmdMsg.getCtx().writeAndFlush(MsgBuilder.getMsg(Consts.CMD.AUTH,Configs.getPWD()));
 	}
 	
 	private void run(CMDMsg cmdMsg) throws DBException{
