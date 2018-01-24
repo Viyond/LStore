@@ -7,13 +7,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.common.beans.CMDMsg;
+import com.mydb.common.beans.Configs;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import io.netty.channel.ChannelHandlerContext;
 
 public class CMDDispatcher {
 	private static Logger log=LoggerFactory.getLogger(CMDDispatcher.class);
-	private final static BlockingQueue<CMDMsg> quee=new LinkedBlockingQueue<>(10000);
-	private final static ExecutorService cmdExe=Executors.newFixedThreadPool(1000);
+	private final static BlockingQueue<CMDMsg> quee=new LinkedBlockingQueue<>(Configs.getInteger("msg.queue.size",10000));
+	private final static ExecutorService cmdExe=Executors.newFixedThreadPool(Configs.getInteger("msg.queue.thread",1000));
 	private static boolean on=true;
 	
 	static{

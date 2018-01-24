@@ -1,5 +1,6 @@
 package com.mydb.server;
 
+import com.mydb.common.beans.Configs;
 import com.mydb.server.nio.IOServer;
 import com.mydb.server.store.MyStore;
 
@@ -9,9 +10,9 @@ import com.mydb.server.store.MyStore;
  */
 public class Main 
 {
-    public static void main( String[] args ){
+    public static void main( String[] args ) throws Exception{
     	//初始化rocksDB
     	System.out.println(MyStore.db);
-    	new IOServer().startIO(args[0], Integer.parseInt(args[1]));
+    	new IOServer().startIO(Configs.get("bind"),Configs.getInteger("port"));
     }
 }

@@ -34,6 +34,8 @@ public class ServerCmdExecutor implements Runnable{
 	
 	private CMDMsg cmdMsg;
 	
+	private String serverpwd=Configs.getPWD();
+	
 	public ServerCmdExecutor(CMDMsg cmdMsg) {
 		super();
 		this.cmdMsg = cmdMsg;
@@ -107,7 +109,7 @@ public class ServerCmdExecutor implements Runnable{
 	private void doAuth(CMDMsg cmdMsg) throws DBException{
 		String pwd=cmdMsg.getMsg().getBODY();
 		//return auth_success
-		if(Configs.getPWD().equals(pwd)){
+		if(serverpwd.equals(pwd)){
 			ChannelHandlerContext ctx=cmdMsg.getCtx();
 			String id=ctx.channel().id().asShortText();
 			//处理clientSessions

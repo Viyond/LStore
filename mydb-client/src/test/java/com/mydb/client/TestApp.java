@@ -18,11 +18,12 @@ import com.mydb.client.model.ScanModel;
 import com.mydb.client.model.SetModel;
 import com.mydb.client.pool.DBPoolFactory;
 import com.mydb.client.session.ServerSessions;
+import com.mydb.common.beans.Configs;
 
 public class TestApp {
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
-    	DBPoolFactory factory=new DBPoolFactory(args[0],Integer.parseInt(args[1]));
+    	DBPoolFactory factory=new DBPoolFactory(Configs.get("bind"),Configs.getInteger("port"),Configs.getInteger("auth.expire"));
     	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
     	confi.setMaxIdle(20);
     	confi.setMaxTotal(50);
