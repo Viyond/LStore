@@ -28,4 +28,29 @@
 			<artifactId>rocksdbjni</artifactId>
 		</dependency>
 	</dependencies>
+	<build>  
+        <finalName>LStore-server-${application.version}</finalName>  
+        <plugins>  
+            <plugin>  
+                <groupId>org.apache.maven.plugins</groupId>  
+                <artifactId>maven-jar-plugin</artifactId>  
+                <version>2.4</version>
+                <configuration>
+                    <archive>  
+                        <manifest>  
+                            <addClasspath>true</addClasspath>  
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.mydb.server.Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>.</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <excludes>
+						<exclude>config.properties</exclude>
+					</excludes>
+                </configuration>
+            </plugin>  
+        </plugins>  
+    </build>
 </project>

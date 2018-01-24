@@ -23,7 +23,7 @@ public class Configs {
 	static{
 		prop=new Properties();
 		try {
-			prop.load(new FileInputStream("./resources/config.properties"));
+			prop.load(new FileInputStream("./conf/config.properties"));
 		} catch (IOException e) {
 			log.error("",e);
 		}
