@@ -1,6 +1,7 @@
 package com.mydb.server.model;
 
 import com.mydb.common.beans.CMDMsg;
+import com.mydb.common.beans.Consts;
 import com.mydb.server.store.MyStore;
 
 public class DeleteModel extends BaseModel{
@@ -12,7 +13,7 @@ public class DeleteModel extends BaseModel{
 	@Override
 	protected Object process() throws Exception {
 		MyStore.db.delete(jbody.getAsString(KEY).getBytes());
-		return jbody;
+		return Consts.STATUS.OK;
 	}
 
 }

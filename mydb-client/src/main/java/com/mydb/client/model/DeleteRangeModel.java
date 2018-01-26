@@ -1,7 +1,9 @@
 package com.mydb.client.model;
 
 import com.mydb.common.beans.Consts;
+import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 
 /**
  * 功能描述:范围删除[begin,end),左闭右开
@@ -13,15 +15,18 @@ import com.mydb.common.beans.Tools;
  * @updateAuthor: l.sl
  * @changesSum:
  */
-public class DeleteRangeModel extends CommandModel {
+public class DeleteRangeModel extends BaseModel {
 	/**
 	 * [begin,end)
 	 * @param begin include
 	 * @param end exclude
 	 */
-	public DeleteRangeModel(String begin,String end) {
+	public DeleteRangeModel(Object begin,Object end) {
 		super(Consts.CMD.DELRANGE);
-		setBody(Tools.getJSON(KEY,begin,VALUE,end).toJSONString());
+		if(begin==null||end==null){
+			throw new DBException(Words.EX_NULL_EXCEPTION);
+		}
+		setBody(Tools.getJSON(KEY,begin.toString(),VALUE,end.toString()).toJSONString());
 	}
 
 }

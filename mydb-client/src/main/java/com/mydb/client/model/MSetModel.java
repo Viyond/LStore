@@ -16,9 +16,9 @@ import net.minidev.json.JSONObject;
  * @updateAuthor: l.sl
  * @changesSum:
  */
-public class MSetModel extends CommandModel{
+public class MSetModel extends BaseModel{
 
-	public MSetModel(Map<String, Object> values) {
+	public MSetModel(Map<Object, Object> values) {
 		super(Consts.CMD.MSET);
 		JSONObject json=Tools.getJSON();
 		json.put(VALUE, values);

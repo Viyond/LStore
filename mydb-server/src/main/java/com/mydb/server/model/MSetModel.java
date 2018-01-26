@@ -4,6 +4,7 @@ import org.rocksdb.RocksDBException;
 import org.rocksdb.WriteBatch;
 import org.rocksdb.WriteOptions;
 import com.mydb.common.beans.CMDMsg;
+import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.server.store.MyStore;
 
@@ -29,7 +30,7 @@ public class MSetModel extends BaseModel{
 			batch.close();
 			options.close();
 		}
-		return jbody;
+		return Consts.STATUS.OK;
 	}
 
 }

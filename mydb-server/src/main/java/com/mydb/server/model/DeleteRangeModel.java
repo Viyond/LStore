@@ -1,6 +1,7 @@
 package com.mydb.server.model;
 
 import com.mydb.common.beans.CMDMsg;
+import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.server.store.MyStore;
 
@@ -18,7 +19,7 @@ public class DeleteRangeModel extends BaseModel{
 	@Override
 	protected Object process() throws Exception, DBException {
 		MyStore.db.deleteRange(beginKey.getBytes(), endKey.getBytes());
-		return jbody;
+		return Consts.STATUS.OK;
 	}
 
 }

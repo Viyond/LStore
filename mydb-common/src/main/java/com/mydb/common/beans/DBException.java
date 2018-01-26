@@ -1,6 +1,6 @@
 package com.mydb.common.beans;
 
-public class DBException extends Exception{
+public class DBException extends RuntimeException{
 	
 	private String reason;
 	private int code;
@@ -18,6 +18,11 @@ public class DBException extends Exception{
 	public DBException(String reason){
 		this.code=-1;
 		this.reason=reason;
+	}
+	
+	public DBException(Words words){
+		this.code=words.code();
+		this.reason=words.msg();
 	}
 	
 	public int getCode(){

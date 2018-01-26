@@ -4,8 +4,12 @@ import java.util.concurrent.TimeUnit;
 import com.mydb.client.pool.CtxResource;
 import com.mydb.client.session.ServerSessions;
 import com.mydb.common.beans.Configs;
+import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
+import com.mydb.common.beans.Tools;
+
+import net.minidev.json.JSONObject;
 
 /**
  * 功能描述:客户端command发送
@@ -17,14 +21,14 @@ import com.mydb.common.beans.MsgBuilder;
  * @updateAuthor: lsl
  * @changesSum:
  */
-public class CommandModel {
+public class BaseModel {
 	
 	private int cmd;
 	private String body,desc;
 	private final static int borrowTimeout=Configs.getInteger("borrow.timeout"),executeTimeout=Configs.getInteger("execute.timeout");
 	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs",OTHER="o";
 	
-	public CommandModel(int cmd) {
+	public BaseModel(int cmd) {
 		super();
 		this.cmd = cmd;
 	}
@@ -43,16 +47,16 @@ public class CommandModel {
 		ServerSessions.resultCommandMap.put(resource.getCtx().channel().id().asShortText(), resource.getResultLock());
 	}
 	
-	private Object afterProcess(CtxResource resource) throws InterruptedException, DBException{
-		Object res=resource.getResultLock().poll(executeTimeout, TimeUnit.SECONDS);
+	private JSONObject afterProcess(CtxResource resource) throws InterruptedException, DBException{
+		JSONObject res=resource.getResultLock().poll(executeTimeout, TimeUnit.SECONDS);
 		if(res==null){
-			throw new DBException("获取失败!");
+			throw new DBException("获取超时!");
 		}
 		return res;
 	}
 	
-	private Object afterFailedProcess(){
-		return null;
+	private JSONObject afterFailedProcess(){
+		return Tools.getJSON("s",Consts.STATUS.EXCEPION+"");
 	}
 	
 	private void process(CtxResource resource) throws Exception {
@@ -67,7 +71,7 @@ public class CommandModel {
 	 * @return Object
 	 * 2018年1月18日 下午8:28:57
 	 */
-	public Object run(){
+	public JSONObject run(){
 		CtxResource resource=null;
 		try {
 			resource=ServerSessions.pool.borrowObject(borrowTimeout);

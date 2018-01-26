@@ -5,6 +5,8 @@ import java.util.concurrent.BlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.mydb.client.Main;
 import com.mydb.client.session.ServerSessions;
 import com.mydb.common.beans.CMDMsg;
@@ -12,6 +14,10 @@ import com.mydb.common.beans.Configs;
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
+import com.mydb.common.beans.Tools;
+import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
+
+import net.minidev.json.JSONObject;
 
 /**
  * 功能描述:command runner
@@ -76,18 +82,21 @@ public class ClientCmdExecutor implements Runnable{
 	}
 	
 	private void doOp() throws DBException{
-		String body=cmdMsg.getMsg().getBODY();
+		IOMsg msg=cmdMsg.getMsg();
+		String body=msg.hasField(IOMsg.getDescriptor().findFieldByNumber(IOMsg.BODY_FIELD_NUMBER))?msg.getBODY():null;
 		String id=cmdMsg.getCtx().channel().id().asShortText();
-		BlockingQueue<Object> resultLock=ServerSessions.resultCommandMap.get(id);
+		int status=cmdMsg.getMsg().getSTATUS();
+		BlockingQueue<JSONObject> resultLock=ServerSessions.resultCommandMap.get(id);
+		JSONObject result=Tools.getJSON("v",body,"s",status+"");
 		try{
 			//存在时才处理
 			if(resultLock!=null){
-				resultLock.add(body);
+				resultLock.add(result);
 			}
 			//如果放入失败,则先拿取在放入
 		}catch(IllegalStateException e){
 			resultLock.poll();
-			resultLock.add(body);
+			resultLock.add(result);
 		}
 	}
 	

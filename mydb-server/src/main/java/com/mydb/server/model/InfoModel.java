@@ -16,8 +16,7 @@ public class InfoModel extends BaseModel {
 
 	@Override
 	protected Object process() throws Exception, DBException {
-		String value=MyStore.db.getProperty(key);
-		return Tools.getJSON(KEY,key,VALUE,value);
+		return MyStore.db.getProperty(key);
 	}
 
 }

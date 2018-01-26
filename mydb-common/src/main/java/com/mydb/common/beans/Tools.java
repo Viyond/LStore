@@ -22,7 +22,7 @@ public class Tools {
 		return new JSONArray();
 	}
 	
-	public static JSONObject parseJson(String json) throws ParseException{
+	public static Object parseJson(String json) throws ParseException{
 		JSONParser jsonParser=new JSONParser(JSONParser.MODE_PERMISSIVE);
 		return jsonParser.parse(json,JSONObject.class);
 	}

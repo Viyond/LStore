@@ -4,6 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import io.netty.channel.ChannelHandlerContext;
+import net.minidev.json.JSONObject;
 
 /**
  * 功能描述:线程次连接对象
@@ -19,7 +20,7 @@ public class CtxResource {
 	
 	private ChannelHandlerContext ctx;
 	private BlockingQueue<Boolean> runLock;
-	private BlockingQueue<Object> resultLock;
+	private BlockingQueue<JSONObject> resultLock;
 	public CtxResource(ChannelHandlerContext ctx) {
 		super();
 		this.ctx = ctx;
@@ -32,7 +33,7 @@ public class CtxResource {
 	public BlockingQueue<Boolean> getRunLock() {
 		return runLock;
 	}
-	public BlockingQueue<Object> getResultLock() {
+	public BlockingQueue<JSONObject> getResultLock() {
 		return resultLock;
 	}
 	

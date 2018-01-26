@@ -1,7 +1,9 @@
 package com.mydb.client.model;
 
 import com.mydb.common.beans.Consts;
+import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 
 /**
  * 功能描述:info model to get info from db
@@ -13,10 +15,13 @@ import com.mydb.common.beans.Tools;
  * @updateAuthor: l.sl
  * @changesSum:
  */
-public class InfoModel extends CommandModel {
+public class InfoModel extends BaseModel {
 
-	public InfoModel(String propertiy) {
+	public InfoModel(String property) {
 		super(Consts.CMD.INFO);
-		setBody(Tools.getJSON(KEY,propertiy).toJSONString());
+		if(property==null){
+			throw new DBException(Words.EX_NULL_EXCEPTION);
+		}
+		setBody(Tools.getJSON(KEY,property).toJSONString());
 	}
 }

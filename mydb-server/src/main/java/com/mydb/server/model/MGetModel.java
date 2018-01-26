@@ -33,13 +33,11 @@ public class MGetModel extends BaseModel {
 			return Tools.getJSON();
 		}
 		Map<byte[], byte[]> res=MyStore.db.multiGet(keys);
-		JSONObject vals=Tools.getJSON(),json=Tools.getJSON();
+		JSONObject vals=Tools.getJSON();
 		res.forEach((k,v)->{
 			vals.put(new String(k),new String(v));
 		});
-		json.put(KEYS, strKeys);
-		json.put(VALUES, vals);
-		return json;
+		return vals;
 	}
 
 }

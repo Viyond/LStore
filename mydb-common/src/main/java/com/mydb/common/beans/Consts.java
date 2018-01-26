@@ -47,5 +47,6 @@ public interface Consts {
 	public interface STATUS{
 		public int OK=1;
 		public int NOTOK=2;
+		public int EXCEPION=3;
 	}
 }
