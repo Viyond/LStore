@@ -22,22 +22,22 @@ import net.minidev.json.JSONObject;
  */
 public class MGetModel extends BaseModel{
 
-	public MGetModel(String ... keys) {
+	public MGetModel(Object ... keys) {
 		super(Consts.CMD.MGET);
 		assemble(Arrays.asList(keys));
 	}
 	
-	public MGetModel(List<String> keys){
+	public MGetModel(List<Object> keys){
 		super(Consts.CMD.MGET);
 		assemble(keys);
 	}
 	
-	public MGetModel(Set<String> keys){
+	public MGetModel(Set<Object> keys){
 		super(Consts.CMD.MGET);
 		assemble(keys);
 	}
 	
-	private void assemble(Collection<String> k){
+	private void assemble(Collection<Object> k){
 		JSONObject json=Tools.getJSON();
 		json.put(KEYS, k);
 		super.setBody(json.toJSONString());

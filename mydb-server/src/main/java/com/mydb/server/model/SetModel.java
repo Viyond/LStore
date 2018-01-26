@@ -3,6 +3,7 @@ package com.mydb.server.model;
 import org.rocksdb.RocksDBException;
 
 import com.mydb.common.beans.CMDMsg;
+import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import com.mydb.server.store.MyStore;
@@ -31,9 +32,6 @@ public class SetModel extends BaseModel {
 	@Override
 	public Object process() throws DBException, RocksDBException {
 		MyStore.db.put(key.getBytes(), value.toString().getBytes());
-		JSONObject jo=Tools.getJSON();
-		jo.put(super.KEY, key);
-		jo.put(super.VALUE, value);
-		return jo;
+		return Consts.STATUS.OK;
 	}
 }

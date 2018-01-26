@@ -36,10 +36,6 @@ public class GetModel extends BaseModel {
 	@Override
 	public Object process() throws DBException, RocksDBException {
 		byte[] data=MyStore.db.get(key.getBytes());
-		value=data==null?"":new String(data);
-		JSONObject json=Tools.getJSON();
-		json.put(KEY, key);
-		json.put(VALUE, value);
-		return json;
+		return data==null?null:new String(data);
 	}
 }

@@ -1,18 +1,14 @@
 package com.mydb.client.session;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
 import com.mydb.client.pool.CtxResource;
 import com.mydb.client.pool.DBPoolFactory;
 import com.mydb.common.beans.Configs;
-import com.mydb.common.beans.DBException;
-import io.netty.channel.ChannelHandlerContext;
+import net.minidev.json.JSONObject;
 
 /**
  * 功能描述:服务端session列表
@@ -34,5 +30,5 @@ public class ServerSessions {
     	confi.setMinIdle(Configs.getInteger("minidle"));
     	pool=new GenericObjectPool<>(factory, confi);
 	}
-	public final static Map<String, BlockingQueue<Object>> resultCommandMap=new ConcurrentHashMap<>(50);
+	public final static Map<String, BlockingQueue<JSONObject>> resultCommandMap=new ConcurrentHashMap<>(50);
 }

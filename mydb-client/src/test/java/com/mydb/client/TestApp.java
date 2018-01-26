@@ -2,12 +2,15 @@ package com.mydb.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
+import com.mydb.client.command.Command;
+import com.mydb.client.command.CommandBridge;
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.DeleteRangeModel;
 import com.mydb.client.model.GetModel;
@@ -23,75 +26,68 @@ import com.mydb.common.beans.Configs;
 public class TestApp {
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
-    	DBPoolFactory factory=new DBPoolFactory(Configs.get("bind"),Configs.getInteger("port"),Configs.getInteger("auth.expire"));
-    	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
-    	confi.setMaxIdle(20);
-    	confi.setMaxTotal(50);
-    	confi.setMinIdle(5);
-    	ServerSessions.pool=new GenericObjectPool<>(factory, confi);
     	Scanner scan=new Scanner(System.in);
-    	for(;;){
-    		try{
-	    		System.out.print("请输入指令:");
-	    		String str=scan.nextLine();
-	    		String[] pair=str.split(" ");
-	    		long begin=System.currentTimeMillis();
-	    		switch(pair[0]){
-	    		case "get":
-	    			GetModel get=new GetModel(pair[1]);
-	    			System.out.println(get.run());
-	    			break;
-	    		case "set":
-	    			SetModel set=new SetModel(pair[1], pair[2]);
-	    			set.run();
-	    			break;
-	    		case "del":
-	    			DeleteModel del=new DeleteModel(pair[1]);
-	    			del.run();
-	    			break;
-	    		case "mget":
-	    			String[] keys=pair[1].split(",");
-	    			MGetModel mget=new MGetModel(keys);
-	    			Object res=mget.run();
-	    			System.out.println(res);
-	    			break;
-	    		case "scan":
-	    			ScanModel sca=new ScanModel(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1"));
-	    			Object res2=sca.run();
-	    			System.out.println(res2);
-	    			break;
-	    		case "mset":
-	    			Map<String, Object> data=new HashMap<>();
-	    			for(int i=1;i<pair.length-1;i+=2){
-	    				data.put(pair[i], pair[i+1]);
-	    			}
-	    			MSetModel mset=new MSetModel(data);
-	    			Object msetres=mset.run();
-	    			System.out.println(msetres);
-	    			break;
-	    		case "rdel":
-	    			DeleteRangeModel rdel=new DeleteRangeModel(pair[1], pair[2]);
-	    			Object rdelres=rdel.run();
-	    			System.out.println(rdelres);
-	    			break;
-	    		case "info":
-	    			/*
-	    			 	"rocksdb.num-files-at-level<N>" - return the number of files at level <N>, where <N> is an ASCII representation of a level number (e.g. "0"). 
-						"rocksdb.stats" - returns a multi-line string that describes statistics about the internal operation of the DB. 
-						"rocksdb.sstables" - returns a multi-line string that describes all of the sstables that make up the db contents. 
-	    			 */
-	    			InfoModel info=new InfoModel(pair[1]);
-	    			System.out.println(info.run());
-	    			break;
-	    			default:
-	    				System.out.println("not supported!");
-	    				continue;
-	    		}
-	    		System.out.println("cost "+(System.currentTimeMillis()-begin));
-    		}catch(Throwable e){
-    			e.printStackTrace();
-    			System.out.println();
-    		}
+    	Random ran=new Random();
+    	String[] c=new String[]{"get","set","del","mget","scan","mset","rdel"};
+    	for(int j=0;j<5;j++){
+    		new Thread(new Runnable() {
+				@Override
+				public void run() {
+					for(;;){
+		        		try{
+		        			//System.out.print("请输入指令:");
+		    	    		//String str=scan.nextLine();
+		    	    		String str=c[ran.nextInt(c.length-1)]+" "+ran.nextInt(50000000)+" "+ran.nextInt(50000000)+" "+ran.nextInt(50000000);
+		    	    		String[] pair=str.split(" ");
+		    	    		long begin=System.currentTimeMillis();
+		    	    		switch(pair[0]){
+		    	    		case "get":
+		    	    			System.out.println(Command.get(pair[1]));
+		    	    			break;
+		    	    		case "set":
+		    	    			Command.set(pair[1], pair[2]);
+		    	    			break;
+		    	    		case "del":
+		    	    			Command.delete(pair[1]);
+		    	    			break;
+		    	    		case "mget":
+		    	    			String[] keys=pair[1].split(",");
+		    	    			System.out.println(Command.mget(keys));
+		    	    			break;
+		    	    		case "scan":
+		    	    			System.out.println(Command.scan(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1")));
+		    	    			break;
+		    	    		case "mset":
+		    	    			Map<Object, Object> data=new HashMap<>();
+		    	    			for(int i=1;i<pair.length-1;i+=2){
+		    	    				data.put(pair[i], pair[i+1]);
+		    	    			}
+		    	    			Command.mset(data);
+		    	    			break;
+		    	    		case "rdel":
+		    	    			Command.deleleteRange(pair[1], pair[2]);
+		    	    			break;
+		    	    		case "info":
+		    	    			/*
+		    	    			 	"rocksdb.num-files-at-level<N>" - return the number of files at level <N>, where <N> is an ASCII representation of a level number (e.g. "0"). 
+		    						"rocksdb.stats" - returns a multi-line string that describes statistics about the internal operation of the DB. 
+		    						"rocksdb.sstables" - returns a multi-line string that describes all of the sstables that make up the db contents. 
+		    	    			 */
+		    	    			InfoModel info=new InfoModel(pair[1]);
+		    	    			System.out.println(info.run());
+		    	    			break;
+		    	    			default:
+		    	    				System.out.println("not supported!");
+		    	    				continue;
+		    	    		}
+		    	    		System.out.println("cost "+(System.currentTimeMillis()-begin));
+		        		}catch(Throwable e){
+		        			e.printStackTrace();
+		        			System.out.println();
+		        		}
+		        	}
+				}
+			}).start();
     	}
     	
 //    	Random ran=new Random();

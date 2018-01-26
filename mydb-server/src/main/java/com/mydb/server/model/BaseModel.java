@@ -42,7 +42,7 @@ public abstract class BaseModel {
 			this.type=msg.getTYPE();
 			this.body=msg.getBODY();
 			this.desc=msg.getDES();
-			this.jbody=Tools.parseJson(this.body);
+			this.jbody=(JSONObject)Tools.parseJson(this.body);
 		} catch (Throwable e) {
 			log.error("",e);
 			this.ctx.writeAndFlush(MsgBuilder.getExceptionMsg(this.cmd,"body can not transform to json"));
@@ -67,7 +67,7 @@ public abstract class BaseModel {
 	protected abstract Object process() throws Exception,DBException;
 	
 	protected void afterSuccessProcess(Object res){
-		ctx.writeAndFlush(MsgBuilder.getOpMsg(cmd, res.toString()));
+		ctx.writeAndFlush(MsgBuilder.getOpMsg(cmd, res==null?null:res.toString()));
 	}
 	
 	protected void afterUnsuccessProcess(){
