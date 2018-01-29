@@ -4,11 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mydb.common.beans.Consts;
-import com.mydb.common.beans.DBException;
-
-import net.minidev.json.JSONObject;
-
 /**
  * 功能描述:the bridge of commands
  * @createTime: 2018年1月24日 下午5:16:47
@@ -25,7 +20,7 @@ public interface CommandBridge {
 	public Map<String, Object> mget(Object ... keys);
 	public Map<String, Object> mget(List<Object> keys);
 	public Map<String, Object> mget(Set<Object> keys);
-	public boolean mset(Map<Object, Object> values);
+	public boolean mset(Map<String, String> values);
 	public boolean mset(Object ... kvs);
 	public void delete(Object key);
 	public void deleleteRange(Object begin,Object end);
@@ -33,4 +28,7 @@ public interface CommandBridge {
 	public List<Map<String, Object>> scan(Object begin,int limit);
 	public List<Map<String, Object>> scan(Object begin,boolean asc);
 	public List<Map<String, Object>> scan(Object begin,int limit,boolean asc);
+	public List<Map<String, Object>> scan(int limit);
+	public List<Map<String, Object>> scan(boolean asc);
+	public List<Map<String, Object>> scan(int limit,boolean asc);
 }
