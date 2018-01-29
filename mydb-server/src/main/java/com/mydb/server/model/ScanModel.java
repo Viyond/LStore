@@ -33,7 +33,13 @@ public class ScanModel extends BaseModel{
 		JSONArray jar=Tools.getEmptyJSONArray();
 		try{
 			it=MyStore.db.newIterator();
-			it.seek(key.getBytes());
+			if(key!=null){
+				it.seek(key.getBytes());
+			}else if(order){
+				it.seekToFirst();
+			}else{
+				it.seekToLast();
+			}
 			if(order){
 				for(int i=0;i<limit&&it.isValid();i++){
 					jar.add(Tools.getJSON(new String(it.key()),new String(it.value())));

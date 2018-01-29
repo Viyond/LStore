@@ -75,7 +75,7 @@ public class BaseCommandAdapter implements CommandBridge{
 	}
 
 	@Override
-	public boolean mset(Map<Object, Object> values) {
+	public boolean mset(Map<String, String> values) {
 		MSetModel mset=new MSetModel(values);
 		checkAndReturn(mset.run());
 		return true;
@@ -87,7 +87,7 @@ public class BaseCommandAdapter implements CommandBridge{
 		if(kvs.length%2!=0){
 			throw new DBException(Words.EX_NOT_PAIR);
 		}
-		Map<Object,Object> values=new HashMap<>();
+		Map<String,String> values=new HashMap<>();
 		for(int i=0;i<kvs.length;i+=2){
 			if(kvs[i]==null||kvs[i+1]==null){
 				throw new DBException(Words.EX_NULL_EXCEPTION);
@@ -152,5 +152,20 @@ public class BaseCommandAdapter implements CommandBridge{
 			throw new DBException(102,"操作异常:"+value);
 		}
 		return value; 
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(int limit) {
+		return scan(null, limit);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(boolean asc) {
+		return scan(null, asc);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(int limit, boolean asc) {
+		return scan(null, limit, asc);
 	}
 }

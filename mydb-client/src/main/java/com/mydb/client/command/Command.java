@@ -53,7 +53,7 @@ public class Command{
 		return cmd.mget(keys);
 	}
 
-	public static boolean mset(Map<Object, Object> values) {
+	public static boolean mset(Map<String, String> values) {
 		return cmd.mset(values);
 	}
 
@@ -83,5 +83,17 @@ public class Command{
 
 	public static List<Map<String, Object>> scan(Object begin, int limit, boolean asc) {
 		return cmd.scan(begin, limit, asc);
+	}
+	
+	public static List<Map<String, Object>> scan(int limit) {
+		return cmd.scan(limit);
+	}
+
+	public static List<Map<String, Object>> scan(boolean asc) {
+		return cmd.scan(asc);
+	}
+
+	public static List<Map<String, Object>> scan(int limit, boolean asc) {
+		return cmd.scan(limit, asc);
 	}
 }

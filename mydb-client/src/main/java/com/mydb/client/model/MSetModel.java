@@ -18,10 +18,10 @@ import net.minidev.json.JSONObject;
  */
 public class MSetModel extends BaseModel{
 
-	public MSetModel(Map<Object, Object> values) {
+	public MSetModel(Map<String, String> values) {
 		super(Consts.CMD.MSET);
 		JSONObject json=Tools.getJSON();
-		json.put(VALUE, values);
+		json.put(VALUE, new JSONObject(values));
 		setBody(json.toJSONString());
 	}
 }
