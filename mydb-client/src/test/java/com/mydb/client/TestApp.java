@@ -2,47 +2,31 @@ package com.mydb.client;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
 import com.mydb.client.command.Command;
-import com.mydb.client.command.CommandBridge;
-import com.mydb.client.model.DeleteModel;
-import com.mydb.client.model.DeleteRangeModel;
-import com.mydb.client.model.GetModel;
 import com.mydb.client.model.InfoModel;
-import com.mydb.client.model.MGetModel;
-import com.mydb.client.model.MSetModel;
-import com.mydb.client.model.ScanModel;
-import com.mydb.client.model.SetModel;
-import com.mydb.client.pool.DBPoolFactory;
-import com.mydb.client.session.ServerSessions;
-import com.mydb.common.beans.Configs;
+import com.mydb.client.nio.IOClient;
 
 public class TestApp {
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
     	Scanner scan=new Scanner(System.in);
-    	Random ran=new Random();
-    	String[] c=new String[]{"get","set","del","mget","scan","mset","rdel"};
-    	for(int j=0;j<5;j++){
+    	for(int j=0;j<1;j++){
     		new Thread(new Runnable() {
 				@Override
 				public void run() {
 					for(;;){
 		        		try{
-		        			//System.out.print("请输入指令:");
-		    	    		//String str=scan.nextLine();
-		    	    		String str=c[ran.nextInt(c.length-1)]+" "+ran.nextInt(50000000)+" "+ran.nextInt(50000000)+" "+ran.nextInt(50000000);
+		        			System.out.print("请输入指令:");
+		    	    		String str=scan.nextLine();
+		    	    		//String str=c[ran.nextInt(c.length-1)]+" "+ran.nextInt(50000000)+" "+ran.nextInt(100)+" "+ran.nextInt(50000000);
 		    	    		String[] pair=str.split(" ");
-		    	    		long begin=System.currentTimeMillis();
 		    	    		switch(pair[0]){
 		    	    		case "get":
-		    	    			System.out.println(Command.get(pair[1]));
+		    	    			Command.get(pair[1]);
 		    	    			break;
 		    	    		case "set":
 		    	    			Command.set(pair[1], pair[2]);
@@ -52,10 +36,13 @@ public class TestApp {
 		    	    			break;
 		    	    		case "mget":
 		    	    			String[] keys=pair[1].split(",");
-		    	    			System.out.println(Command.mget(keys));
+		    	    			Command.mget(keys);
 		    	    			break;
 		    	    		case "scan":
 		    	    			System.out.println(Command.scan(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1")));
+		    	    			break;
+		    	    		case "scan2":
+		    	    			System.out.println(Command.scan(Integer.parseInt(pair[1]),pair[2].equals("1")));
 		    	    			break;
 		    	    		case "mset":
 		    	    			Map<Object, Object> data=new HashMap<>();
@@ -80,7 +67,7 @@ public class TestApp {
 		    	    				System.out.println("not supported!");
 		    	    				continue;
 		    	    		}
-		    	    		System.out.println("cost "+(System.currentTimeMillis()-begin));
+		    	    		ind.incrementAndGet();
 		        		}catch(Throwable e){
 		        			e.printStackTrace();
 		        			System.out.println();

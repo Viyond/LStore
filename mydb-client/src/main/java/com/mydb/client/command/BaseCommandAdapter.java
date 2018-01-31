@@ -149,7 +149,7 @@ public class BaseCommandAdapter implements CommandBridge{
 		case Consts.STATUS.NOTOK:
 			throw new DBException(101,"操作失败!"+value);
 		case Consts.STATUS.EXCEPION:
-			throw new DBException(102,"操作异常:"+value);
+			throw new DBException(102,"操作异常!");
 		}
 		return value; 
 	}
