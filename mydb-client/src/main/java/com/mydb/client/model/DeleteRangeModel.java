@@ -4,6 +4,7 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import com.mydb.common.beans.Words;
+import static com.mydb.common.beans.DBConfigs.*;
 
 /**
  * 功能描述:范围删除[begin,end),左闭右开
@@ -21,12 +22,12 @@ public class DeleteRangeModel extends BaseModel {
 	 * @param begin include
 	 * @param end exclude
 	 */
-	public DeleteRangeModel(Object begin,Object end) {
+	public DeleteRangeModel(Object begin,Object end,String columnFamilyName) {
 		super(Consts.CMD.DELRANGE);
 		if(begin==null||end==null){
 			throw new DBException(Words.EX_NULL_EXCEPTION);
 		}
-		setBody(Tools.getJSON(KEY,begin.toString(),VALUE,end.toString()).toJSONString());
+		setBody(Tools.getJSON(KEY,begin.toString(),VALUE,end.toString(),CF,columnFamilyName).toJSONString());
 	}
 
 }

@@ -4,10 +4,8 @@ import org.rocksdb.RocksDBException;
 
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
-import com.mydb.common.beans.Tools;
 import com.mydb.server.store.MyStore;
-
-import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 public class GetModel extends BaseModel {
 	
@@ -35,7 +33,7 @@ public class GetModel extends BaseModel {
 	
 	@Override
 	public Object process() throws DBException, RocksDBException {
-		byte[] data=MyStore.db.get(key.getBytes());
+		byte[] data=MyStore.db.get(getColumnFamily(),key.getBytes());
 		return data==null?null:new String(data);
 	}
 }

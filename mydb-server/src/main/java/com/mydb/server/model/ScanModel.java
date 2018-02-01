@@ -1,14 +1,13 @@
 package com.mydb.server.model;
 
 import org.rocksdb.RocksIterator;
-
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import com.mydb.server.store.MyStore;
-
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 public class ScanModel extends BaseModel{
 
@@ -32,7 +31,7 @@ public class ScanModel extends BaseModel{
 		RocksIterator it=null;
 		JSONArray jar=Tools.getEmptyJSONArray();
 		try{
-			it=MyStore.db.newIterator();
+			it=MyStore.db.newIterator(getColumnFamily());
 			if(key!=null){
 				it.seek(key.getBytes());
 			}else if(order){

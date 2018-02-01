@@ -1,14 +1,10 @@
 package com.mydb.client.model;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import com.mydb.common.beans.Consts;
-import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 /**
  * 功能描述:MGet
@@ -22,24 +18,11 @@ import net.minidev.json.JSONObject;
  */
 public class MGetModel extends BaseModel{
 
-	public MGetModel(Object ... keys) {
+	public MGetModel(String columnFamilyName,Collection<Object> keys) {
 		super(Consts.CMD.MGET);
-		assemble(Arrays.asList(keys));
-	}
-	
-	public MGetModel(List<Object> keys){
-		super(Consts.CMD.MGET);
-		assemble(keys);
-	}
-	
-	public MGetModel(Set<Object> keys){
-		super(Consts.CMD.MGET);
-		assemble(keys);
-	}
-	
-	private void assemble(Collection<Object> k){
 		JSONObject json=Tools.getJSON();
-		json.put(KEYS, k);
+		json.put(KEYS, keys);
+		json.put(CF, columnFamilyName);
 		super.setBody(json.toJSONString());
 	}
 }

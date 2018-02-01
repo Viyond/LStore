@@ -4,6 +4,7 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import com.mydb.common.beans.Words;
+import static com.mydb.common.beans.DBConfigs.*;
 
 /**
  * 功能描述:info model to get info from db

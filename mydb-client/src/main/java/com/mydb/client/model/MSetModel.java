@@ -1,10 +1,10 @@
 package com.mydb.client.model;
 
 import java.util.Map;
-
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.Tools;
 import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 /**
  * 功能描述:MSet Model
@@ -18,10 +18,11 @@ import net.minidev.json.JSONObject;
  */
 public class MSetModel extends BaseModel{
 
-	public MSetModel(Map<String, String> values) {
+	public MSetModel(Map<String, String> values,String columnFamilyName) {
 		super(Consts.CMD.MSET);
 		JSONObject json=Tools.getJSON();
 		json.put(VALUE, new JSONObject(values));
+		json.put(CF, columnFamilyName);
 		setBody(json.toJSONString());
 	}
 }

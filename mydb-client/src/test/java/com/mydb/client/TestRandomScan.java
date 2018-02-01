@@ -1,36 +1,28 @@
 package com.mydb.client;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.mydb.client.command.Command;
 import com.mydb.client.nio.IOClient;
 
-public class TestWrite {
+public class TestRandomScan {
 	
-	public static AtomicInteger ind=new AtomicInteger(0);
+	private static AtomicInteger ind=new AtomicInteger(0);
+	private static Random ran=new Random();
 	
 	public static void main(String[] args) {
-		
-		for(int i=0;i<10;i++){
+		for(int i=0;i<20;i++){
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					for(int i=0;i<50000;i++){
-						long begin=System.currentTimeMillis();
-						Map<String, String> map=new HashMap<>(10000);
-						for(int j=0;j<10000;j++){
-							map.put(UUID.randomUUID().toString(),UUID.randomUUID().toString());
-						}
-						Command.mset(map);
+					for(;;){
+						String key=Long.toHexString(ran.nextInt(Integer.MAX_VALUE));
+						//System.out.println(key+":"+Command.scan(key,20));
+						Command.scan(key,20);
 						ind.incrementAndGet();
-						System.out.println("at:"+i+" cost:"+(System.currentTimeMillis()-begin));
 					}
-					System.out.println("done~");
 				}
 			}).start();
 		}

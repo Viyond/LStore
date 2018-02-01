@@ -96,4 +96,60 @@ public class Command{
 	public static List<Map<String, Object>> scan(int limit, boolean asc) {
 		return cmd.scan(limit, asc);
 	}
+
+	public static String get(Object key, String columnFamilyName) {
+		return cmd.get(key, columnFamilyName);
+	}
+
+	public static boolean set(Object key, Object value, String columnFamilyName) {
+		return cmd.set(key, value, columnFamilyName);
+	}
+
+	public static Map<String, Object> mget(List<Object> keys, String columnFamilyName) {
+		return cmd.mget(keys, columnFamilyName);
+	}
+
+	public static Map<String, Object> mget(Set<Object> keys, String columnFamilyName) {
+		return cmd.mget(keys, columnFamilyName);
+	}
+
+	public static boolean mset(Map<String, String> values, String columnFamilyName) {
+		return cmd.mset(values, columnFamilyName);
+	}
+
+	public static void delete(Object key, String columnFamilyName) {
+		cmd.delete(key, columnFamilyName);
+	}
+
+	public static void deleleteRange(Object begin, Object end, String columnFamilyName) {
+		cmd.deleleteRange(begin, end, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(Object begin, String columnFamilyName) {
+		return cmd.scan(begin, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(Object begin, int limit, String columnFamilyName) {
+		return cmd.scan(begin, limit, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(Object begin, boolean asc, String columnFamilyName) {
+		return cmd.scan(begin, asc, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(Object begin, int limit, boolean asc, String columnFamilyName) {
+		return cmd.scan(begin, limit, asc, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(int limit, String columnFamilyName) {
+		return cmd.scan(limit, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(boolean asc, String columnFamilyName) {
+		return cmd.scan(asc, columnFamilyName);
+	}
+
+	public static List<Map<String, Object>> scan(int limit, boolean asc, String columnFamilyName) {
+		return cmd.scan(limit, asc, columnFamilyName);
+	}
 }
