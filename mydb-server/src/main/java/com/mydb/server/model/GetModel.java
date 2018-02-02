@@ -1,13 +1,13 @@
 package com.mydb.server.model;
 
+import org.rocksdb.ColumnFamilyHandle;
 import org.rocksdb.RocksDBException;
 
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
-import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
-
-import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 public class GetModel extends BaseModel {
 	
@@ -35,7 +35,11 @@ public class GetModel extends BaseModel {
 	
 	@Override
 	public Object process() throws DBException, RocksDBException {
-		byte[] data=MyStore.db.get(key.getBytes());
+		ColumnFamilyHandle cf=getColumnFamily();
+		if(cf==null){
+			throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);
+		}
+		byte[] data=MyStore.db.get(cf,key.getBytes());
 		return data==null?null:new String(data);
 	}
 }

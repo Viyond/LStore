@@ -1,5 +1,6 @@
 package com.mydb.server.model;
 
+import org.rocksdb.ColumnFamilyHandle;
 import org.rocksdb.RocksDBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +9,11 @@ import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
 import com.mydb.common.beans.Tools;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
+import com.mydb.server.store.MyStore;
+
 import io.netty.channel.ChannelHandlerContext;
 import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 /**
  * 功能描述:server's baseModel
@@ -31,9 +35,6 @@ public abstract class BaseModel {
 	JSONObject jbody;
 	String desc;
 	ChannelHandlerContext ctx;
-	
-	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs",OTHER="o";
-	
 	public BaseModel(CMDMsg cmdMsg){
 		try{
 			this.cmd=cmdMsg.getCmd();
@@ -60,6 +61,19 @@ public abstract class BaseModel {
 			jbody.put("type",type);
 			this.afterUnsuccessProcess();
 		}
+	}
+	
+	/**
+	 * 功能描述：获取columnFamily,不存在则会创建
+	 * @author:l.sl
+	 * @return
+	 * @throws RocksDBException
+	 * @return ColumnFamilyHandle
+	 * 2018年2月1日 下午5:58:31
+	 */
+	protected ColumnFamilyHandle getColumnFamily() throws RocksDBException {
+		String cf=jbody.getAsString(CF);
+		return cf==null?MyStore.getDefaultColumnFamilyHandler():MyStore.getAndCreateColumnFamilyHandler(cf);
 	}
 	
 	protected void beforeProcess() throws RocksDBException{

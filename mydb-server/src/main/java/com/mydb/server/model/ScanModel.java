@@ -1,14 +1,15 @@
 package com.mydb.server.model;
 
+import org.rocksdb.ColumnFamilyHandle;
 import org.rocksdb.RocksIterator;
-
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
-
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import static com.mydb.common.beans.DBConfigs.*;
 
 public class ScanModel extends BaseModel{
 
@@ -32,7 +33,11 @@ public class ScanModel extends BaseModel{
 		RocksIterator it=null;
 		JSONArray jar=Tools.getEmptyJSONArray();
 		try{
-			it=MyStore.db.newIterator();
+			ColumnFamilyHandle cf=getColumnFamily();
+			if(cf==null){
+				throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);
+			}
+			it=MyStore.db.newIterator(cf);
 			if(key!=null){
 				it.seek(key.getBytes());
 			}else if(order){

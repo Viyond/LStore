@@ -69,7 +69,6 @@ public class ClientCmdExecutor implements Runnable{
 		switch(cmd){
 		case Consts.CMD.RUN:
 			run(cmdMsg);
-			Main.ind.incrementAndGet();
 			break;
 		case Consts.CMD.TO_AUTH:
 			doAuth(cmdMsg);

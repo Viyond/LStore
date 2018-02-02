@@ -1,14 +1,20 @@
 package com.mydb.client.command;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.DeleteRangeModel;
+import com.mydb.client.model.DropColumnFamilyModel;
 import com.mydb.client.model.GetModel;
+import com.mydb.client.model.ListColumnFamilyModel;
 import com.mydb.client.model.MGetModel;
 import com.mydb.client.model.MSetModel;
 import com.mydb.client.model.ScanModel;
@@ -17,11 +23,10 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import com.mydb.common.beans.Words;
-
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
+import static com.mydb.common.beans.DBConfigs.*;
 
 /**
  * 功能描述:implemention of command bridge
@@ -35,82 +40,51 @@ import net.minidev.json.parser.ParseException;
  */
 public class BaseCommandAdapter implements CommandBridge{
 
+	private Logger log=LoggerFactory.getLogger(getClass());
+	
 	@Override
 	public String get(Object key) {
-		GetModel get=new GetModel(key);
-		Object result=checkAndReturn(get.run());
-		return result==null?null:result.toString();
+		return get(key, DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public boolean set(Object key, Object value) {
-		SetModel set=new SetModel(key, value);
-		checkAndReturn(set.run());
-		return true;
+		return set(key, value,DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public Map<String, Object> mget(Object... keys) {
-		MGetModel mget=new MGetModel(keys);
-		Object value=checkAndReturn(mget.run());
-		try {
-			return (JSONObject)Tools.parseJson(value.toString());
-		} catch (ParseException e) {
-			throw new DBException(Words.EX_NOT_JSON);
-		}
+		return mget(keys, DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public Map<String, Object> mget(List<Object> keys) {
-		MGetModel mget=new MGetModel(keys);
-		Object value=checkAndReturn(mget.run());
-		return (JSONObject)value;
+		return mget(keys,DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public Map<String, Object> mget(Set<Object> keys) {
-		MGetModel mget=new MGetModel(keys);
-		Object value=checkAndReturn(mget.run());
-		return (JSONObject)value;
+		return mget(keys, DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public boolean mset(Map<String, String> values) {
-		MSetModel mset=new MSetModel(values);
-		checkAndReturn(mset.run());
-		return true;
+		return mset(values, DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public boolean mset(Object... kvs) {
-		//if not in pairs!
-		if(kvs.length%2!=0){
-			throw new DBException(Words.EX_NOT_PAIR);
-		}
-		Map<String,String> values=new HashMap<>();
-		for(int i=0;i<kvs.length;i+=2){
-			if(kvs[i]==null||kvs[i+1]==null){
-				throw new DBException(Words.EX_NULL_EXCEPTION);
-			}
-			String key=kvs[i].toString();
-			String value=kvs[i+1].toString();
-			values.put(key, value);
-		}
-		MSetModel mset=new MSetModel(values);
-		checkAndReturn(mset.run());
-		return true;
+		return mset(DEFAULT_COLUMNFAMILY, kvs);
 	}
 
 	@Override
 	public void delete(Object key) {
-		DeleteModel del=new DeleteModel(key);
-		checkAndReturn(del.run());
+		delete(key, DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
 	public void deleleteRange(Object begin, Object end) {
-		DeleteRangeModel rdel=new DeleteRangeModel(begin, end);
-		checkAndReturn(rdel.run());
+		deleleteRange(begin, end, DEFAULT_COLUMNFAMILY);
 	}
 
 	@Override
@@ -130,17 +104,7 @@ public class BaseCommandAdapter implements CommandBridge{
 
 	@Override
 	public List<Map<String, Object>> scan(Object begin, int limit, boolean asc) {
-		try{
-			ScanModel scan=new ScanModel(begin, limit, asc);
-			JSONArray values=(JSONArray)Tools.parseJson(checkAndReturn(scan.run()).toString());
-			List<Map<String, Object>> tvalues=new ArrayList<>(values.size());
-			for(int i=0;i<values.size();i++){
-				tvalues.add((JSONObject)values.get(i));
-			}
-			return tvalues;
-		} catch (ParseException e) {
-			throw new DBException(Words.EX_NOT_JSON);
-		}
+		return scan(begin,limit,asc,DEFAULT_COLUMNFAMILY);
 	}
 	
 	private Object checkAndReturn(JSONObject result) {
@@ -149,7 +113,7 @@ public class BaseCommandAdapter implements CommandBridge{
 		case Consts.STATUS.NOTOK:
 			throw new DBException(101,"操作失败!"+value);
 		case Consts.STATUS.EXCEPION:
-			throw new DBException(102,"操作异常:"+value);
+			throw new DBException(102,"操作异常!");
 		}
 		return value; 
 	}
@@ -167,5 +131,121 @@ public class BaseCommandAdapter implements CommandBridge{
 	@Override
 	public List<Map<String, Object>> scan(int limit, boolean asc) {
 		return scan(null, limit, asc);
+	}
+
+	@Override
+	public String get(Object key, String columnFamilyName) {
+		GetModel get=new GetModel(key,columnFamilyName);
+		Object result=checkAndReturn(get.run());
+		return result==null?null:result.toString();
+	}
+
+	@Override
+	public boolean set(Object key, Object value, String columnFamilyName) {
+		SetModel set=new SetModel(key, value,columnFamilyName);
+		checkAndReturn(set.run());
+		return true;
+	}
+
+	@Override
+	public Map<String, Object> mget(List<Object> keys, String columnFamilyName) {
+		MGetModel mget=new MGetModel(columnFamilyName,keys);
+		Object value=checkAndReturn(mget.run());
+		try {
+			return (JSONObject)Tools.parseJson(value.toString());
+		} catch (ParseException e) {
+			log.error("",e);
+			throw new DBException(Words.EX_NOT_JSON);
+		}
+	}
+
+	@Override
+	public Map<String, Object> mget(Set<Object> keys, String columnFamilyName) {
+		MGetModel mget=new MGetModel(DEFAULT_COLUMNFAMILY,keys);
+		Object value=checkAndReturn(mget.run());
+		return (JSONObject)value;
+	}
+
+	@Override
+	public boolean mset(Map<String, String> values, String columnFamilyName) {
+		MSetModel mset=new MSetModel(values,columnFamilyName);
+		checkAndReturn(mset.run());
+		return true;
+	}
+
+	@Override
+	public void delete(Object key, String columnFamilyName) {
+		DeleteModel del=new DeleteModel(key,columnFamilyName);
+		checkAndReturn(del.run());
+	}
+
+	@Override
+	public void deleleteRange(Object begin, Object end, String columnFamilyName) {
+		DeleteRangeModel rdel=new DeleteRangeModel(begin, end,columnFamilyName);
+		checkAndReturn(rdel.run());
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(Object begin, String columnFamilyName) {
+		return scan(begin, 10, true, columnFamilyName);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(Object begin, int limit, String columnFamilyName) {
+		return scan(begin,limit,true,columnFamilyName);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(Object begin, boolean asc, String columnFamilyName) {
+		return scan(begin,10,asc,DEFAULT_COLUMNFAMILY);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(Object begin, int limit, boolean asc, String columnFamilyName) {
+		try{
+			ScanModel scan=new ScanModel(begin, limit, asc,columnFamilyName);
+			JSONArray values=(JSONArray)Tools.parseJson(checkAndReturn(scan.run()).toString());
+			List<Map<String, Object>> tvalues=new ArrayList<>(values.size());
+			for(int i=0;i<values.size();i++){
+				tvalues.add((JSONObject)values.get(i));
+			}
+			return tvalues;
+		} catch (ParseException e) {
+			log.error("",e);
+			throw new DBException(Words.EX_NOT_JSON);
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(int limit, String columnFamilyName) {
+		return scan(null,limit,true,columnFamilyName);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(boolean asc, String columnFamilyName) {
+		return scan(null,10,asc,columnFamilyName);
+	}
+
+	@Override
+	public List<Map<String, Object>> scan(int limit, boolean asc, String columnFamilyName) {
+		return scan(null,limit,asc,columnFamilyName);
+	}
+
+	@Override
+	public List<String> listColumnFamiles() {
+		ListColumnFamilyModel model=new ListColumnFamilyModel();
+		Object obj=checkAndReturn(model.run());
+		try {
+			return (List)Tools.parseJson(obj.toString());
+		} catch (ParseException e) {
+			log.error("",e);
+			throw new DBException(Words.EX_NOT_JSON);
+		}
+	}
+
+	@Override
+	public void dropColumnFamily(String columnFamilyName) {
+		DropColumnFamilyModel model=new DropColumnFamilyModel(columnFamilyName);
+		checkAndReturn(model.run());
 	}
 }

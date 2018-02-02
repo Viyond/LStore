@@ -26,7 +26,6 @@ public class BaseModel {
 	private int cmd;
 	private String body,desc;
 	private final static int borrowTimeout=Configs.getInteger("borrow.timeout"),executeTimeout=Configs.getInteger("execute.timeout");
-	final String KEY="k",KEYS="ks",VALUE="v",VALUES="vs",KEYANDVALUES="kvs",OTHER="o";
 	
 	public BaseModel(int cmd) {
 		super();
