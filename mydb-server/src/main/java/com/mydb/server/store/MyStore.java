@@ -102,7 +102,10 @@ public class MyStore {
 	 * @return void
 	 * 2018年2月1日 下午5:07:40
 	 */
-	public static ColumnFamilyHandle createColumnFamily(String columnFamilyName) throws RocksDBException{
+	public static synchronized ColumnFamilyHandle createColumnFamily(String columnFamilyName) throws RocksDBException{
+		if(columnFamilies.containsKey(columnFamilyName)){
+			return columnFamilies.get(columnFamilyName);
+		}
 		ColumnFamilyDescriptor desc=new ColumnFamilyDescriptor(columnFamilyName.getBytes());
 		ColumnFamilyHandle columnHandler=db.createColumnFamily(desc);
 		columnFamilies.put(columnFamilyName, columnHandler);
