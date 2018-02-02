@@ -55,6 +55,12 @@ public class TestApp {
 		    	    		case "rdel":
 		    	    			Command.deleleteRange(pair[1], pair[2]);
 		    	    			break;
+		    	    		case "cf":
+		    	    			System.out.println(Command.listColumnFamilies());
+		    	    			break;
+		    	    		case "dcf":
+		    	    			Command.dropColumnFamilies(pair[1]);
+		    	    			break;
 		    	    		case "info":
 		    	    			/*
 		    	    			 	"rocksdb.num-files-at-level<N>" - return the number of files at level <N>, where <N> is an ASCII representation of a level number (e.g. "0"). 

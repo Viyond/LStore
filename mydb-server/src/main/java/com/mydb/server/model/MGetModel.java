@@ -9,6 +9,7 @@ import org.rocksdb.RocksDBException;
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -36,6 +37,8 @@ public class MGetModel extends BaseModel {
 		if(keys.size()==0){
 			return Tools.getJSON();
 		}
+		ColumnFamilyHandle cf=getColumnFamily();
+		if(cf==null) throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);
 		listCfh=new ArrayList<>(strKeys.size());
 		ColumnFamilyHandle cfh=getColumnFamily();
 		keys.forEach(e -> {

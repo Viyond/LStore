@@ -3,8 +3,11 @@ package com.mydb.server.model;
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
+import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
 import static com.mydb.common.beans.DBConfigs.*;
+
+import org.rocksdb.ColumnFamilyHandle;
 
 public class DeleteRangeModel extends BaseModel{
 
@@ -19,7 +22,11 @@ public class DeleteRangeModel extends BaseModel{
 
 	@Override
 	protected Object process() throws Exception, DBException {
-		MyStore.db.deleteRange(getColumnFamily(),beginKey.getBytes(), endKey.getBytes());
+		ColumnFamilyHandle cf=getColumnFamily();
+		if(cf==null){
+			throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);
+		}
+		MyStore.db.deleteRange(cf,beginKey.getBytes(), endKey.getBytes());
 		return Consts.STATUS.OK;
 	}
 

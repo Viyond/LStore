@@ -152,4 +152,12 @@ public class Command{
 	public static List<Map<String, Object>> scan(int limit, boolean asc, String columnFamilyName) {
 		return cmd.scan(limit, asc, columnFamilyName);
 	}
+	
+	public static List<String> listColumnFamilies(){
+		return cmd.listColumnFamiles();
+	}
+	
+	public static void dropColumnFamilies(String columnFamilyName){
+		cmd.dropColumnFamily(columnFamilyName);
+	}
 }

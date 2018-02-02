@@ -26,7 +26,7 @@ public class TestWrite {
 						for(int j=0;j<10000;j++){
 							map.put(UUID.randomUUID().toString(),UUID.randomUUID().toString());
 						}
-						Command.mset(map);
+						Command.mset(map,"c1");
 						ind.incrementAndGet();
 						System.out.println("at:"+i+" cost:"+(System.currentTimeMillis()-begin));
 					}

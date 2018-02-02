@@ -7,6 +7,7 @@ import org.rocksdb.WriteOptions;
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
+import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
 import net.minidev.json.JSONObject;
 import static com.mydb.common.beans.DBConfigs.*;
@@ -24,6 +25,9 @@ public class MSetModel extends BaseModel{
 		WriteBatch batch=new WriteBatch();
 		try{
 			ColumnFamilyHandle cf=getColumnFamily();
+			if(cf==null){
+				throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);
+			}
 			kvs.forEach((k,v)->{
 				batch.put(cf,k.getBytes(),v.toString().getBytes());
 			});

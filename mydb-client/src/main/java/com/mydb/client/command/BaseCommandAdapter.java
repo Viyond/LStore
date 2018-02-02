@@ -6,9 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.DeleteRangeModel;
+import com.mydb.client.model.DropColumnFamilyModel;
 import com.mydb.client.model.GetModel;
+import com.mydb.client.model.ListColumnFamilyModel;
 import com.mydb.client.model.MGetModel;
 import com.mydb.client.model.MSetModel;
 import com.mydb.client.model.ScanModel;
@@ -34,6 +40,8 @@ import static com.mydb.common.beans.DBConfigs.*;
  */
 public class BaseCommandAdapter implements CommandBridge{
 
+	private Logger log=LoggerFactory.getLogger(getClass());
+	
 	@Override
 	public String get(Object key) {
 		return get(key, DEFAULT_COLUMNFAMILY);
@@ -146,6 +154,7 @@ public class BaseCommandAdapter implements CommandBridge{
 		try {
 			return (JSONObject)Tools.parseJson(value.toString());
 		} catch (ParseException e) {
+			log.error("",e);
 			throw new DBException(Words.EX_NOT_JSON);
 		}
 	}
@@ -202,6 +211,7 @@ public class BaseCommandAdapter implements CommandBridge{
 			}
 			return tvalues;
 		} catch (ParseException e) {
+			log.error("",e);
 			throw new DBException(Words.EX_NOT_JSON);
 		}
 	}
@@ -219,5 +229,23 @@ public class BaseCommandAdapter implements CommandBridge{
 	@Override
 	public List<Map<String, Object>> scan(int limit, boolean asc, String columnFamilyName) {
 		return scan(null,limit,asc,columnFamilyName);
+	}
+
+	@Override
+	public List<String> listColumnFamiles() {
+		ListColumnFamilyModel model=new ListColumnFamilyModel();
+		Object obj=checkAndReturn(model.run());
+		try {
+			return (List)Tools.parseJson(obj.toString());
+		} catch (ParseException e) {
+			log.error("",e);
+			throw new DBException(Words.EX_NOT_JSON);
+		}
+	}
+
+	@Override
+	public void dropColumnFamily(String columnFamilyName) {
+		DropColumnFamilyModel model=new DropColumnFamilyModel(columnFamilyName);
+		checkAndReturn(model.run());
 	}
 }
