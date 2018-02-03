@@ -1,5 +1,5 @@
 # LStore
-the LStore base on rocksdb with netty protocol,and easy to use,and of course,billions of **KEY-VALUE pair** can easily store into it!And query them with **ms** latency.It'll be awesome if you run it on **SSD**.
+The LStore base on rocksdb is easy to use,and of course,ten billions of **KEY-VALUE pair** can easily store into it!And query them in **ms** latency with LStore-Client.It'll be awesome if you run it on **SSD**.
 
 ##### this version is not for release,I'm still working on it!
 
@@ -13,3 +13,17 @@ the LStore base on rocksdb with netty protocol,and easy to use,and of course,bil
 | delete  | delete key-value pair with given key  | no limits |
 | deleteRange | delete data by given range  | never try to delete range from begin to end while stored billions of data  |
 | info  | get informateions of store base | no limits |
+
+##### how to?
+- server
+  - create a directory which LStore  will be in.
+  - down load from release page (not ready yet!) and put it on your server and extracting them out.
+  - make sure you'd Java Environment (1.8+) installed!
+  - make some configration within config.properties which in conf directory
+  - run start.sh to start the server
+  
+- client
+  - make client.jar in your project
+  - make some configration within config.properties which in conf directory
+  - use com.mydb.client.command.Command to do something you like
+  - enjoy
