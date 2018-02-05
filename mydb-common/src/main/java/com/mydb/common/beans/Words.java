@@ -6,6 +6,7 @@ public enum Words {
 	EX_NOT_PAIR(1002,"params not in pair!"),
 	EX_NOT_JSON(1003,"can not convert to json!"),
 	EX_COLUMNFAMILY_NOTEXISTS(1004,"Column Family no longer exists!"),
+	EX_EXECUTE_TIMEOUT(1005,"Execute time-out!!"),
 	;
 	
 	private int code;

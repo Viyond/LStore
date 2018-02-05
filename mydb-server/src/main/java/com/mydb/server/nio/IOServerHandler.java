@@ -46,11 +46,14 @@ public class IOServerHandler extends SimpleChannelInboundHandler<IOMsg>{
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
 		super.channelInactive(ctx);
+		ctx.close();
 	}
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// TODO Auto-generated method stub
 		super.exceptionCaught(ctx, cause);
+		cause.printStackTrace();
+		log.error("",cause);
 	}
 }
