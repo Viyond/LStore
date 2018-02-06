@@ -46,6 +46,9 @@ public class IOServerHandler extends SimpleChannelInboundHandler<IOMsg>{
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
 		super.channelInactive(ctx);
+		String id=ctx.channel().id().asShortText();
+		//从sessionMap中移除
+		ClientSessions.sessionMap.remove(id);
 		ctx.close();
 	}
 	

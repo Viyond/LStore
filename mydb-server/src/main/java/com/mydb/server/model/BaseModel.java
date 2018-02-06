@@ -51,6 +51,7 @@ public abstract class BaseModel {
 	}
 	
 	public void run(){
+		long begin=System.currentTimeMillis();
 		try{
 			this.beforeProcess();
 			this.afterSuccessProcess(process());
@@ -60,6 +61,8 @@ public abstract class BaseModel {
 			jbody.put("cmd",cmd);
 			jbody.put("type",type);
 			this.afterUnsuccessProcess();
+		}finally{
+			log.debug("CMD:{},cost:{}",cmd,(System.currentTimeMillis()-begin));
 		}
 	}
 	

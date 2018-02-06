@@ -160,4 +160,12 @@ public class Command{
 	public static void dropColumnFamilies(String columnFamilyName){
 		cmd.dropColumnFamily(columnFamilyName);
 	}
+	
+	public static boolean exists(String key){
+		return cmd.exists(key);
+	}
+	
+	public static boolean exists(String key,String columnFamilyName){
+		return cmd.exists(key, columnFamilyName);
+	}
 }
