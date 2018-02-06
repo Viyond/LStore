@@ -1,15 +1,11 @@
 package com.mydb.client.command;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.DeleteRangeModel;
 import com.mydb.client.model.DropColumnFamilyModel;
@@ -259,6 +255,6 @@ public class BaseCommandAdapter implements CommandBridge{
 	public boolean exists(String key, String columnFamilyName) {
 		ExistsModel model=new ExistsModel(key, columnFamilyName);
 		Object o=checkAndReturn(model.run());
-		return o.hashCode()==49;
+		return String.valueOf(o).equals("1");
 	}
 }
