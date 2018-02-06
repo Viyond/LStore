@@ -33,7 +33,7 @@ public class MGetModel extends BaseModel {
 	}
 
 	@Override
-	protected Object process() throws DBException, RocksDBException {
+	protected Object process() throws RocksDBException{
 		if(keys.size()==0){
 			return Tools.getJSON();
 		}

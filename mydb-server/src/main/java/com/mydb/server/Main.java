@@ -17,8 +17,12 @@ import com.mydb.server.store.MyStore;
  */
 public class Main {
     public static void main( String[] args ) throws Exception{
-    	//初始化rocksDB
-    	System.out.println(MyStore.db);
+    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MyStore.init();
+			}
+		}).start();
     	new IOServer().startIO(Configs.get("bind"),Configs.getInteger("port"));
     }
 }

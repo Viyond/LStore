@@ -6,6 +6,8 @@ import com.mydb.common.beans.DBException;
 import com.mydb.server.store.MyStore;
 import static com.mydb.common.beans.DBConfigs.*;
 
+import org.rocksdb.RocksDBException;
+
 public class DropColumnFamilyModel extends BaseModel{
 
 	private String cfName;
@@ -16,7 +18,7 @@ public class DropColumnFamilyModel extends BaseModel{
 	}
 
 	@Override
-	protected Object process() throws Exception, DBException {
+	protected Object process() throws RocksDBException{
 		MyStore.dropColumnFamily(cfName);
 		return Consts.STATUS.OK;
 	}

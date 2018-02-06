@@ -20,8 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.common.beans.Configs;
 import com.mydb.common.beans.DBConfigs;
-import com.mydb.common.beans.DBException;
-import com.mydb.common.beans.Words;
 
 /**
  * 功能描述:Rocksdb 处理类
@@ -36,12 +34,15 @@ import com.mydb.common.beans.Words;
 public class MyStore {
 	private final static Logger log=LoggerFactory.getLogger(MyStore.class);
 	public static RocksDB db;
+	private static volatile boolean ready=false;
 	public final static Map<String,ColumnFamilyHandle> columnFamilies=new ConcurrentHashMap<>(10);
-	static{
+	
+	public static void init(){
 		final DBOptions options = new DBOptions();
 		options.setCreateIfMissing(true);
 		options.setCreateMissingColumnFamilies(true);
 		try {
+			long begin=System.currentTimeMillis();
 			String db_path=Configs.get("dbpath");
 			List<ColumnFamilyHandle> listFamilyHandler=new ArrayList<>();
 			List<ColumnFamilyDescriptor> listDescriptor=getColumnFamilies(db_path);
@@ -49,12 +50,25 @@ public class MyStore {
 			for(int i=0;i<listDescriptor.size();i++){
 				columnFamilies.put(new String(listDescriptor.get(i).columnFamilyName()),listFamilyHandler.get(i));
 			}
-			log.info("DB inited.Base Path:{},column families:{}",db_path,columnFamilies.keySet());
+			log.info("DB inited,cost:{},Base Path:{},column families:{}",(System.currentTimeMillis()-begin),db_path,columnFamilies.keySet());
+			ready=true;
 		} catch (RocksDBException e) {
 			e.printStackTrace();
 			log.error("",e);
 			System.exit(-1);
 		}
+	}
+	
+
+	/**
+	 * 功能描述：is db ready?
+	 * @author:l.sl
+	 * @return
+	 * @return boolean
+	 * 2018年2月6日 上午11:35:50
+	 */
+	public static boolean ready(){
+		return ready;
 	}
 	
 	private static List<ColumnFamilyDescriptor> getColumnFamilies(String db_path){

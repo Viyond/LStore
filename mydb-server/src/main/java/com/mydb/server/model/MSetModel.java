@@ -20,7 +20,7 @@ public class MSetModel extends BaseModel{
 	}
 
 	@Override
-	protected Object process() throws DBException, RocksDBException {
+	protected Object process() throws RocksDBException{
 		WriteOptions options=new WriteOptions();
 		WriteBatch batch=new WriteBatch();
 		try{
