@@ -12,6 +12,7 @@ The LStore base on rocksdb is easy to use,and of course,ten billions of **KEY-VA
 | scan  | scan data from store base with given key-prefix | 10000 records per time  |
 | delete  | delete key-value pair with given key  | no limits |
 | deleteRange | delete data by given range  | never try to delete range from begin to end while stored billions of data  |
+| exists  | is key in store | no limits |
 | info  | get informateions of store base | no limits |
 
 ##### how to?
