@@ -1,5 +1,7 @@
 package com.mydb.server.model;
 
+import org.rocksdb.RocksDBException;
+
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
@@ -23,7 +25,7 @@ public class ListColumnFamilyModel extends BaseModel{
 	}
 
 	@Override
-	protected Object process() throws Exception, DBException {
+	protected Object process() throws RocksDBException{
 		JSONArray jar=Tools.getEmptyJSONArray();
 		jar.addAll(MyStore.columnFamilies.keySet());
 		return jar;

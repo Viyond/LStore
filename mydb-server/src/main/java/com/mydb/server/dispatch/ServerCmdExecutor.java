@@ -10,6 +10,7 @@ import com.mydb.common.beans.MsgBuilder;
 import com.mydb.server.model.DeleteModel;
 import com.mydb.server.model.DeleteRangeModel;
 import com.mydb.server.model.DropColumnFamilyModel;
+import com.mydb.server.model.ExistsModel;
 import com.mydb.server.model.GetModel;
 import com.mydb.server.model.InfoModel;
 import com.mydb.server.model.ListColumnFamilyModel;
@@ -108,6 +109,9 @@ public class ServerCmdExecutor implements Runnable{
 			break;
 		case Consts.CMD.DROPCF:
 			new DropColumnFamilyModel(cmdMsg).run();
+			break;
+		case Consts.CMD.EXISTS:
+			new ExistsModel(cmdMsg).run();
 			break;
 		default:
 			throw new DBException("not support yet!");

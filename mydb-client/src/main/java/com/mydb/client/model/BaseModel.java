@@ -8,6 +8,7 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
 import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 
 import net.minidev.json.JSONObject;
 
@@ -49,7 +50,7 @@ public class BaseModel {
 	private JSONObject afterProcess(CtxResource resource) throws InterruptedException, DBException{
 		JSONObject res=resource.getResultLock().poll(executeTimeout, TimeUnit.SECONDS);
 		if(res==null){
-			throw new DBException("获取超时!");
+			throw new DBException(Words.EX_EXECUTE_TIMEOUT);
 		}
 		return res;
 	}

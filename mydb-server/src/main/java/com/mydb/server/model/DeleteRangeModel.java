@@ -8,6 +8,7 @@ import com.mydb.server.store.MyStore;
 import static com.mydb.common.beans.DBConfigs.*;
 
 import org.rocksdb.ColumnFamilyHandle;
+import org.rocksdb.RocksDBException;
 
 public class DeleteRangeModel extends BaseModel{
 
@@ -21,7 +22,7 @@ public class DeleteRangeModel extends BaseModel{
 	}
 
 	@Override
-	protected Object process() throws Exception, DBException {
+	protected Object process() throws RocksDBException{
 		ColumnFamilyHandle cf=getColumnFamily();
 		if(cf==null){
 			throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);

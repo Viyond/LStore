@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.mydb.client.model.DeleteModel;
 import com.mydb.client.model.DeleteRangeModel;
 import com.mydb.client.model.DropColumnFamilyModel;
+import com.mydb.client.model.ExistsModel;
 import com.mydb.client.model.GetModel;
 import com.mydb.client.model.ListColumnFamilyModel;
 import com.mydb.client.model.MGetModel;
@@ -247,5 +248,17 @@ public class BaseCommandAdapter implements CommandBridge{
 	public void dropColumnFamily(String columnFamilyName) {
 		DropColumnFamilyModel model=new DropColumnFamilyModel(columnFamilyName);
 		checkAndReturn(model.run());
+	}
+
+	@Override
+	public boolean exists(String key) {
+		return exists(key, DEFAULT_COLUMNFAMILY);
+	}
+
+	@Override
+	public boolean exists(String key, String columnFamilyName) {
+		ExistsModel model=new ExistsModel(key, columnFamilyName);
+		Object o=checkAndReturn(model.run());
+		return o.hashCode()==49;
 	}
 }

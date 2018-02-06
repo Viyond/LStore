@@ -47,4 +47,6 @@ public interface CommandBridge {
 	public List<Map<String, Object>> scan(int limit,boolean asc,String columnFamilyName);
 	public List<String> listColumnFamiles();
 	public void dropColumnFamily(String columnFamilyName);
+	public boolean exists(String key);
+	public boolean exists(String key,String columnFamilyName);
 }

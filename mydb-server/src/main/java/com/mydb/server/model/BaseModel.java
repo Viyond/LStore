@@ -8,6 +8,7 @@ import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.MsgBuilder;
 import com.mydb.common.beans.Tools;
+import com.mydb.common.beans.Words;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import com.mydb.server.store.MyStore;
 
@@ -51,15 +52,24 @@ public abstract class BaseModel {
 	}
 	
 	public void run(){
+		long begin=System.currentTimeMillis();
 		try{
 			this.beforeProcess();
 			this.afterSuccessProcess(process());
-		}catch(Throwable e){
+		}catch(DBException e){
+			log.error("{}",e.toString());
+			jbody.put("ex",e.toString());
+			jbody.put("cmd",cmd);
+			jbody.put("type",type);
+			this.afterUnsuccessProcess();
+		}catch(RocksDBException e){
 			log.error("",e);
 			jbody.put("ex",e.getMessage());
 			jbody.put("cmd",cmd);
 			jbody.put("type",type);
 			this.afterUnsuccessProcess();
+		}finally{
+			log.debug("CMD:{},cost:{}",cmd,(System.currentTimeMillis()-begin));
 		}
 	}
 	
@@ -77,8 +87,11 @@ public abstract class BaseModel {
 	}
 	
 	protected void beforeProcess() throws RocksDBException{
+		if(!MyStore.ready()){
+			throw new DBException(Words.EX_SERVER_NOTREADY);
+		}
 	}
-	protected abstract Object process() throws Exception,DBException;
+	protected abstract Object process() throws RocksDBException,DBException;
 	
 	protected void afterSuccessProcess(Object res){
 		ctx.writeAndFlush(MsgBuilder.getOpMsg(cmd, res==null?null:res.toString()));

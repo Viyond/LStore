@@ -1,6 +1,7 @@
 package com.mydb.server.model;
 
 import org.rocksdb.ColumnFamilyHandle;
+import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.DBException;
@@ -29,7 +30,7 @@ public class ScanModel extends BaseModel{
 	}
 
 	@Override
-	protected Object process() throws Exception, DBException {
+	protected Object process() throws RocksDBException{
 		RocksIterator it=null;
 		JSONArray jar=Tools.getEmptyJSONArray();
 		try{

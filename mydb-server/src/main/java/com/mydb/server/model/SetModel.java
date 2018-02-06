@@ -31,7 +31,7 @@ public class SetModel extends BaseModel {
 	}
 
 	@Override
-	public Object process() throws DBException, RocksDBException {
+	public Object process() throws RocksDBException{
 		ColumnFamilyHandle cf=getColumnFamily();
 		if(cf==null){
 			throw new DBException(Words.EX_COLUMNFAMILY_NOTEXISTS);
