@@ -1,7 +1,5 @@
-package com.mydb.client;
+package com.link.test;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,33 +7,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.mydb.client.command.Command;
 import com.mydb.client.nio.IOClient;
 
-public class TestScanFromBeginToEnd {
+public class TestRandomScan {
 	
 	private static AtomicInteger ind=new AtomicInteger(0);
 	private static Random ran=new Random();
 	
 	public static void main(String[] args) {
-		for(int i=0;i<1;i++){
+		//String[] str=new String[]{"1234","234","23423","23232","234234","234234"};
+		for(int i=0;i<20;i++){
 			new Thread(new Runnable() {
-				int size=0;
 				@Override
 				public void run() {
-					List<Map<String, Object>> list=Command.scan(10000,true);
-					String lastKey=list.get(list.size()-1).keySet().iterator().next();
-					size+=list.size();
-					do{
+					for(;;){
+						String key=Long.toHexString(ran.nextInt(Integer.MAX_VALUE));
+						//String key=str[ran.nextInt(str.length-1)];
+						//System.out.println(key+":"+Command.scan(key,20));
+						Command.scan(key,1,"cc"+ran.nextInt(20));
 						ind.incrementAndGet();
-						list=Command.scan(lastKey,10000,true);
-						if(list.size()==10000){
-							lastKey=list.get(list.size()-1).keySet().iterator().next();
-						}else{
-							lastKey=null;
-						}
-						size+=list.size();
-						System.out.println("---->scaned:"+size);
-					}while(lastKey!=null);
-					System.out.println("done~all size:"+size);
-					System.exit(0);
+					}
 				}
 			}).start();
 		}

@@ -1,6 +1,5 @@
-package com.mydb.client;
+package com.link.test;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -11,7 +10,7 @@ import com.mydb.client.command.Command;
 import com.mydb.client.model.InfoModel;
 import com.mydb.client.nio.IOClient;
 
-public class TestAppColumnFamily {
+public class TestApp {
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
     	Scanner scan=new Scanner(System.in);
@@ -28,40 +27,42 @@ public class TestAppColumnFamily {
 		    	    		long begin=System.currentTimeMillis();
 		    	    		switch(pair[0]){
 		    	    		case "get":
-		    	    			System.out.println(Command.get(pair[1],pair[2]));
+		    	    			System.out.println(Command.get(pair[1]));
 		    	    			break;
 		    	    		case "set":
-		    	    			Command.set(pair[1], pair[2],pair[3]);
+		    	    			Command.set(pair[1], pair[2]);
 		    	    			break;
 		    	    		case "del":
-		    	    			Command.delete(pair[1],pair[2]);
+		    	    			Command.delete(pair[1]);
 		    	    			break;
 		    	    		case "mget":
 		    	    			String[] keys=pair[1].split(",");
-		    	    			String cf=pair[2];
-		    	    			System.out.println(Command.mget(Arrays.asList(keys),cf));
+		    	    			System.out.println(Command.mget(keys));
 		    	    			break;
 		    	    		case "scan":
-		    	    			System.out.println(Command.scan(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1"),pair[4]));
+		    	    			System.out.println(Command.scan(pair[1],Integer.parseInt(pair[2]),pair[3].equals("1")));
 		    	    			break;
 		    	    		case "scan2":
-		    	    			System.out.println(Command.scan(Integer.parseInt(pair[1]),pair[2].equals("1"),pair[3]));
+		    	    			System.out.println(Command.scan(Integer.parseInt(pair[1]),pair[2].equals("1")));
 		    	    			break;
 		    	    		case "mset":
-		    	    			Map<String, String> data=new HashMap<>();
-		    	    			for(int i=2;i<pair.length-1;i+=2){
+		    	    			Map<Object, Object> data=new HashMap<>();
+		    	    			for(int i=1;i<pair.length-1;i+=2){
 		    	    				data.put(pair[i], pair[i+1]);
 		    	    			}
-		    	    			Command.mset(data,pair[1]);
+		    	    			Command.mset(data);
 		    	    			break;
 		    	    		case "rdel":
-		    	    			Command.deleleteRange(pair[1], pair[2],pair[3]);
+		    	    			Command.deleleteRange(pair[1], pair[2]);
 		    	    			break;
 		    	    		case "cf":
 		    	    			System.out.println(Command.listColumnFamilies());
 		    	    			break;
 		    	    		case "dcf":
 		    	    			Command.dropColumnFamilies(pair[1]);
+		    	    			break;
+		    	    		case "exists":
+		    	    			System.out.println(Command.exists(pair[1]));
 		    	    			break;
 		    	    		case "info":
 		    	    			/*
