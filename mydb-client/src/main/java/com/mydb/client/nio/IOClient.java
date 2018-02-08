@@ -2,6 +2,8 @@ package com.mydb.client.nio;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mydb.common.beans.Configs;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -21,6 +23,8 @@ public class IOClient {
 	private final static Logger log=LoggerFactory.getLogger(IOClient.class);
 	public static Bootstrap b=null;
 	public static EventLoopGroup group=null;
+	public final static String host=Configs.get("bind");
+	public final static int port=Configs.getInteger("port");
 	static{
 		EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -44,8 +48,8 @@ public class IOClient {
         }
 	}
         
-	public void startIO(String host,int port) throws InterruptedException{
-        ChannelFuture f = b.connect(host, port).sync();
+	public void startIO() throws InterruptedException{
+        ChannelFuture f = b.connect(host, port).addListener(new IOConnectionListener()).sync();
         log.info("client connect to host:{}, port:{}", host, port);
         f.channel().closeFuture().sync();
 	}

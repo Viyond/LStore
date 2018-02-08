@@ -229,6 +229,7 @@ public class BaseCommandAdapter implements CommandBridge{
 	}
 
 	@Override
+	@SuppressWarnings("all")
 	public List<String> listColumnFamiles() {
 		ListColumnFamilyModel model=new ListColumnFamilyModel();
 		Object obj=checkAndReturn(model.run());

@@ -28,14 +28,10 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class DBPoolFactory implements PooledObjectFactory<CtxResource>{
 	
-	private String host;
-	private int port;
 	private int logtimeout;
 	
-	public DBPoolFactory(String host, int port,int logtimeout) {
+	public DBPoolFactory(int logtimeout) {
 		super();
-		this.host = host;
-		this.port = port;
 		this.logtimeout=logtimeout;
 	}
 
@@ -56,16 +52,15 @@ public class DBPoolFactory implements PooledObjectFactory<CtxResource>{
 			@Override
 			public void run() {
 				try {
-					new IOClient().startIO(host, port);
+					new IOClient().startIO();
 				} catch (InterruptedException e) {
 					log.error("",e);
 				}
 			}
 		}).start();
-		//等待返回,这点比较巧妙
 		ChannelHandlerContext ctx=loginQuee.poll(logtimeout,TimeUnit.SECONDS);
 		if(ctx==null){
-			throw new DBException("获取链接失败:"+host+":"+port);
+			throw new DBException("获取链接失败:"+IOClient.host+":"+IOClient.port);
 		}
 		log.debug(ctx.channel().id().asShortText()+"\t created");
 		CtxResource resource=new CtxResource(ctx);
