@@ -1,6 +1,11 @@
 package com.mydb.common.beans;
 
 public enum Words {
+	
+	EX_NO_RESOURCE(100,"cant't get connection!"),
+	EX_OP_FAIL(101,"operation failed!"),
+	EX_OP_EXCEPTION(102,"operation throw excepions"),
+	
 	EX_SERVER_RUNTIME_EXCEPTION(1000,"server errors hadppens!"),
 	EX_NULL_EXCEPTION(1001,"params can not be null!"),
 	EX_NOT_PAIR(1002,"params not in pair!"),
@@ -24,5 +29,9 @@ public enum Words {
 	
 	public String msg(){
 		return this.msg;
+	}
+	
+	public String msg(Object reason){
+		return this.msg+":"+reason.toString();
 	}
 }

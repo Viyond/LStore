@@ -1,5 +1,7 @@
 package com.mydb.client.nio;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.client.dispatch.CMDDispatcher;
@@ -8,18 +10,19 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{
 	Logger log=LoggerFactory.getLogger(getClass());
-	
+
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, IOMsg msg) throws Exception {
 		int cmd=msg.getCMD();
 		try{
 			if(!Consts.CMD.CMDS.get(cmd)){
 				throw new DBException("Unknown Command!");
-			//为了使用链接次，登录需要在这里做特殊处理
+				//为了使用链接次，登录需要在这里做特殊处理
 			}else if(Consts.CMD.AUTH_SUCCESS==cmd){
 				authSuccess(ctx);
 				return;
@@ -32,22 +35,35 @@ public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{
 			log.error("",e);
 		}
 	}
-	
+
 	private void authSuccess(ChannelHandlerContext ctx) throws InterruptedException{
 		//登录完成后放入登录队列
 		DBPoolFactory.loginQuee.put(ctx);
 	}
-	
+
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		super.channelActive(ctx);
 	}
-	
+
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		final EventLoop eventLoop = ctx.channel().eventLoop();  
+		eventLoop.schedule(new Runnable() {  
+			@Override 
+			public void run() {  
+				try {
+					log.error("lose connection,now re-try!");
+					new IOClient().startIO();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}  
+		}, 3L, TimeUnit.SECONDS);  
 		super.channelInactive(ctx);
 	}
-	
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		super.exceptionCaught(ctx, cause);

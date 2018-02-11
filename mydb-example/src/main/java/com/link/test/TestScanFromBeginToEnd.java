@@ -1,4 +1,4 @@
-package com.mydb.client;
+package com.link.test;
 
 import java.util.List;
 import java.util.Map;
@@ -9,22 +9,33 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.mydb.client.command.Command;
 import com.mydb.client.nio.IOClient;
 
-public class TestSequentialScan {
+public class TestScanFromBeginToEnd {
 	
 	private static AtomicInteger ind=new AtomicInteger(0);
 	private static Random ran=new Random();
 	
 	public static void main(String[] args) {
-		for(int i=0;i<20;i++){
+		for(int i=0;i<1;i++){
 			new Thread(new Runnable() {
+				int size=0;
 				@Override
 				public void run() {
-					String key=Long.toHexString(ran.nextInt(Integer.MAX_VALUE));
-					for(;;){
-						List<Map<String, Object>> list=Command.scan(key,20);
-						key=list.get(list.size()-1).keySet().iterator().next();
+					List<Map<String, Object>> list=Command.scan(10000,true);
+					String lastKey=list.get(list.size()-1).keySet().iterator().next();
+					size+=list.size();
+					do{
 						ind.incrementAndGet();
-					}
+						list=Command.scan(lastKey,10000,true,"cc12");
+						if(list.size()==10000){
+							lastKey=list.get(list.size()-1).keySet().iterator().next();
+						}else{
+							lastKey=null;
+						}
+						size+=list.size();
+						System.out.println("---->scaned:"+size);
+					}while(lastKey!=null);
+					System.out.println("done~all size:"+size);
+					System.exit(0);
 				}
 			}).start();
 		}

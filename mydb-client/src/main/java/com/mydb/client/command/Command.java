@@ -24,7 +24,7 @@ public class Command{
 	
 	static{
 		//initializing the connection pool.
-		DBPoolFactory factory=new DBPoolFactory(Configs.get("bind"),Configs.getInteger("port"),Configs.getInteger("auth.expire"));
+		DBPoolFactory factory=new DBPoolFactory(Configs.getInteger("auth.expire"));
     	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
     	confi.setMaxIdle(Configs.getInteger("maxidle",20));
     	confi.setMaxTotal(Configs.getInteger("maxtotal",50));

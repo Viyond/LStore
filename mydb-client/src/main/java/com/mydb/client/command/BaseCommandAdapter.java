@@ -108,9 +108,11 @@ public class BaseCommandAdapter implements CommandBridge{
 		Object value=result.get("v");
 		switch(result.getAsNumber("s").intValue()){
 		case Consts.STATUS.NOTOK:
-			throw new DBException(101,"操作失败!"+value);
+			throw new DBException(Words.EX_OP_FAIL.code(),Words.EX_OP_FAIL.msg(value));
 		case Consts.STATUS.EXCEPION:
-			throw new DBException(102,"操作异常!");
+			throw new DBException(Words.EX_OP_EXCEPTION.code(),Words.EX_OP_EXCEPTION.msg(value));
+		case Consts.STATUS.NORESOURCE:
+			throw new DBException(Words.EX_NO_RESOURCE);
 		}
 		return value; 
 	}
@@ -229,6 +231,7 @@ public class BaseCommandAdapter implements CommandBridge{
 	}
 
 	@Override
+	@SuppressWarnings("all")
 	public List<String> listColumnFamiles() {
 		ListColumnFamilyModel model=new ListColumnFamilyModel();
 		Object obj=checkAndReturn(model.run());
