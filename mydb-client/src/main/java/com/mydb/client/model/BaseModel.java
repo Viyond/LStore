@@ -59,6 +59,10 @@ public class BaseModel {
 		return Tools.getJSON("s",Consts.STATUS.EXCEPION+"");
 	}
 	
+	private JSONObject afterGetResourceFailedProcess(){
+		return Tools.getJSON("s",Consts.STATUS.NORESOURCE+"");
+	}
+	
 	private void process(CtxResource resource) throws Exception {
 		//能够设置成功则说明发送命令锁已经可用
 		resource.getCtx().writeAndFlush(MsgBuilder.getOpMsg(cmd,body==null?"":body, desc==null?"":desc));
@@ -78,7 +82,9 @@ public class BaseModel {
 			beforeProcess(resource);
 			process(resource);
 			return afterProcess(resource);
-		} catch (Exception e) {
+		} catch(DBException e){
+			return afterGetResourceFailedProcess();
+		}catch (Exception e) {
 			e.printStackTrace();
 			return afterFailedProcess();
 		}finally{

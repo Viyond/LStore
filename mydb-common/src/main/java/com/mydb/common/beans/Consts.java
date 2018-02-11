@@ -51,5 +51,6 @@ public interface Consts {
 		public int OK=1;
 		public int NOTOK=2;
 		public int EXCEPION=3;
+		public int NORESOURCE=4;
 	}
 }

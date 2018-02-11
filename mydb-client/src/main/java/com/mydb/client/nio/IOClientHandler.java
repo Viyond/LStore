@@ -53,6 +53,7 @@ public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{
 			@Override 
 			public void run() {  
 				try {
+					log.error("lose connection,now re-try!");
 					new IOClient().startIO();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
