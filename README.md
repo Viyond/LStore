@@ -28,3 +28,5 @@ The LStore base on rocksdb is easy to use,and of course,ten billions of **KEY-VA
   - make some configration within config.properties which in conf directory
   - use com.mydb.client.command.Command to do something you like
   - enjoy
+##### architecture
+![architecture](https://raw.githubusercontent.com/lovingshu/LStore/master/architecture.png)
