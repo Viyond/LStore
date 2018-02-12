@@ -18,15 +18,16 @@ The LStore base on rocksdb is easy to use,and of course,ten billions of **KEY-VA
 ##### how to?
 - server
   - create a directory which LStore  will be in.
-  - down load from release page (not ready yet!) and put it on your server and extracting them out.
+  - down load from release page and put it on your server and extracting them out.
   - make sure you'd Java Environment (1.8+) installed!
   - make some configration within config.properties which in conf directory
   - run start.sh to start the server
   
 - client
-  - make client.jar in your project
-  - make some configration within config.properties which in conf directory
+  - download or clone from https://github.com/lovingshu/LStore.git and check mydb-example to learn how to use.
+  - make some configration within config.properties in conf directory,the conf directory should be in your project,create it if miss it.If you don't know how to,check mydb-example
   - use com.mydb.client.command.Command to do something you like
   - enjoy
+  
 ##### architecture
 ![architecture](https://raw.githubusercontent.com/lovingshu/LStore/master/architecture.png)
