@@ -9,11 +9,16 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mydb.client.command.Command;
 import com.mydb.client.model.InfoModel;
 import com.mydb.client.nio.IOClient;
 
 public class TestAppColumnFamily {
+	private final static Logger log=LoggerFactory.getLogger(TestAppColumnFamily.class);
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
     	BufferedReader bufReader=new BufferedReader(new InputStreamReader(System.in));
@@ -25,6 +30,7 @@ public class TestAppColumnFamily {
 		        		try{
 		        			System.out.print("请输入指令:");
 		    	    		String str=bufReader.readLine();
+		    	    		log.info("command:{}",str);
 		    	    		//String str=c[ran.nextInt(c.length-1)]+" "+ran.nextInt(50000000)+" "+ran.nextInt(100)+" "+ran.nextInt(50000000);
 		    	    		String[] pair=str.split(" ");
 		    	    		long begin=System.currentTimeMillis();

@@ -54,9 +54,6 @@ public class IOServerHandler extends SimpleChannelInboundHandler<IOMsg>{
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		// TODO Auto-generated method stub
 		super.exceptionCaught(ctx, cause);
-		cause.printStackTrace();
-		log.error("",cause);
 	}
 }
