@@ -48,19 +48,6 @@ public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		final EventLoop eventLoop = ctx.channel().eventLoop();  
-		eventLoop.schedule(new Runnable() {  
-			@Override 
-			public void run() {  
-				try {
-					log.error("lose connection,now re-try!");
-					new IOClient().startIO();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}  
-		}, 3L, TimeUnit.SECONDS);  
 		super.channelInactive(ctx);
 	}
 

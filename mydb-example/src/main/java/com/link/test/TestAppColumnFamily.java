@@ -1,5 +1,7 @@
 package com.link.test;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +16,7 @@ import com.mydb.client.nio.IOClient;
 public class TestAppColumnFamily {
 	public static AtomicInteger ind=new AtomicInteger(0);
     public static void main( String[] args ) throws Exception{
-    	Scanner scan=new Scanner(System.in);
+    	BufferedReader bufReader=new BufferedReader(new InputStreamReader(System.in));
     	for(int j=0;j<1;j++){
     		new Thread(new Runnable() {
 				@Override
@@ -22,7 +24,7 @@ public class TestAppColumnFamily {
 					for(;;){
 		        		try{
 		        			System.out.print("请输入指令:");
-		    	    		String str=scan.nextLine();
+		    	    		String str=bufReader.readLine();
 		    	    		//String str=c[ran.nextInt(c.length-1)]+" "+ran.nextInt(50000000)+" "+ran.nextInt(100)+" "+ran.nextInt(50000000);
 		    	    		String[] pair=str.split(" ");
 		    	    		long begin=System.currentTimeMillis();

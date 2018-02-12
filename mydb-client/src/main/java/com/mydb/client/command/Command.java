@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mydb.client.pool.DBPoolFactory;
 import com.mydb.client.session.ServerSessions;
 import com.mydb.common.beans.Configs;
@@ -21,15 +24,22 @@ import com.mydb.common.beans.Configs;
  */
 public class Command{
 	private static CommandBridge cmd=new BaseCommandAdapter();
-	
+	private final static Logger log=LoggerFactory.getLogger(Command.class);
 	static{
-		//initializing the connection pool.
-		DBPoolFactory factory=new DBPoolFactory(Configs.getInteger("auth.expire"));
-    	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
-    	confi.setMaxIdle(Configs.getInteger("maxidle",20));
-    	confi.setMaxTotal(Configs.getInteger("maxtotal",50));
-    	confi.setMinIdle(Configs.getInteger("minidle",2));
-    	ServerSessions.pool=new GenericObjectPool<>(factory, confi);
+		try{
+			//initializing the connection pool.
+			DBPoolFactory factory=new DBPoolFactory(Configs.getInteger("auth.expire"));
+	    	GenericObjectPoolConfig confi=new GenericObjectPoolConfig();
+	    	confi.setMaxIdle(Configs.getInteger("maxidle",20));
+	    	confi.setMaxTotal(Configs.getInteger("maxtotal",50));
+	    	confi.setMinIdle(Configs.getInteger("minidle",2));
+	    	confi.setTestOnBorrow(true);
+	    	ServerSessions.pool=new GenericObjectPool<>(factory, confi);
+		}catch(Throwable e){
+			log.error("connection pool initializing error!");
+			log.error("",e);
+			System.exit(0);
+		}
 	}
 	
 	

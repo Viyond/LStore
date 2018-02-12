@@ -14,7 +14,7 @@ public class TestRandomScan {
 	
 	public static void main(String[] args) {
 		//String[] str=new String[]{"1234","234","23423","23232","234234","234234"};
-		for(int i=0;i<20;i++){
+		for(int i=0;i<1000;i++){
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
