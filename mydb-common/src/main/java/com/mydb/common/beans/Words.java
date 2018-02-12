@@ -5,6 +5,7 @@ public enum Words {
 	EX_NO_RESOURCE(100,"cant't get connection!"),
 	EX_OP_FAIL(101,"operation failed!"),
 	EX_OP_EXCEPTION(102,"operation throw excepions"),
+	EX_RESOURCE_UNVIABLE(103,"connection is not viable,will lose this and create a new one!"),
 	
 	EX_SERVER_RUNTIME_EXCEPTION(1000,"server errors hadppens!"),
 	EX_NULL_EXCEPTION(1001,"params can not be null!"),

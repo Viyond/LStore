@@ -49,7 +49,7 @@ public class IOClient {
 	}
         
 	public void startIO() throws InterruptedException{
-        ChannelFuture f = b.connect(host, port).addListener(new IOConnectionListener()).sync();
+		ChannelFuture f=b.connect(host, port).sync();;
         log.info("client connect to host:{}, port:{}", host, port);
         f.channel().closeFuture().sync();
 	}

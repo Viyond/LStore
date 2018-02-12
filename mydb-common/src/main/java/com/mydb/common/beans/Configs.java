@@ -25,6 +25,7 @@ public class Configs {
 		try {
 			prop.load(new FileInputStream("./conf/config.properties"));
 		} catch (IOException e) {
+			log.error("config loading failed!");
 			log.error("",e);
 		}
 	}
