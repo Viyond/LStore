@@ -13,14 +13,16 @@ public class TestExists {
 		private static Random ran=new Random();
 		
 		public static void main(String[] args) {
-			for(int i=0;i<80;i++){
+			for(int i=0;i<20;i++){
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						for(;;){
 							try {
 								Long lon=ran.nextLong();
-								Command.exists(Long.toHexString(lon));
+								String key=Long.toHexString(lon);
+								Command.exists(key);
+								//System.out.println(key+"\t"+Command.exists(key,"cc2"));
 								ind.incrementAndGet();
 							} catch (Throwable e) {
 								System.out.println("err");

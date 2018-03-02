@@ -42,8 +42,6 @@ public class BaseModel {
 	}
 
 	private void beforeProcess(CtxResource resource) throws InterruptedException{
-		//利用队列来形成阻塞
-		resource.getRunLock().put(true);
 		ServerSessions.resultCommandMap.put(resource.getCtx().channel().id().asShortText(), resource.getResultLock());
 	}
 	

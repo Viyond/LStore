@@ -106,6 +106,5 @@ public class DBPoolFactory implements PooledObjectFactory<CtxResource>{
 		String id=p.getObject().getCtx().channel().id().asShortText();
 		ServerSessions.resultCommandMap.remove(id);
 		p.getObject().getResultLock().poll();
-		p.getObject().getRunLock().poll();
 	}
 }

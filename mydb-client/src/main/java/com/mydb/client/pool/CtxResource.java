@@ -19,19 +19,14 @@ import net.minidev.json.JSONObject;
 public class CtxResource {
 	
 	private ChannelHandlerContext ctx;
-	private BlockingQueue<Boolean> runLock;
 	private BlockingQueue<JSONObject> resultLock;
 	public CtxResource(ChannelHandlerContext ctx) {
 		super();
 		this.ctx = ctx;
-		this.runLock=new ArrayBlockingQueue<>(1);
 		this.resultLock=new ArrayBlockingQueue<>(1);
 	}
 	public ChannelHandlerContext getCtx() {
 		return ctx;
-	}
-	public BlockingQueue<Boolean> getRunLock() {
-		return runLock;
 	}
 	public BlockingQueue<JSONObject> getResultLock() {
 		return resultLock;
@@ -49,13 +44,6 @@ public class CtxResource {
 			e.printStackTrace();
 		}
 		try{
-			runLock.clear();
-			runLock=null;
-		}catch(Throwable e){
-			e.printStackTrace();
-		}
-		try{
-			resultLock.clear();
 			resultLock=null;
 		}catch(Throwable e){
 			e.printStackTrace();
