@@ -1,9 +1,7 @@
 package com.mydb.server.model;
 
 import org.rocksdb.RocksDBException;
-
 import com.mydb.common.beans.CMDMsg;
-import com.mydb.common.beans.DBException;
 import com.mydb.common.beans.Tools;
 import com.mydb.server.store.MyStore;
 import net.minidev.json.JSONArray;

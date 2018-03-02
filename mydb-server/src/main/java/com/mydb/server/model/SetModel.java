@@ -5,10 +5,8 @@ import org.rocksdb.RocksDBException;
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
-import com.mydb.common.beans.Tools;
 import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
-import net.minidev.json.JSONObject;
 import static com.mydb.common.beans.DBConfigs.*;
 
 public class SetModel extends BaseModel {

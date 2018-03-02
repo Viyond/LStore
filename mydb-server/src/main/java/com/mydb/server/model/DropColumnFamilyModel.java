@@ -2,10 +2,8 @@ package com.mydb.server.model;
 
 import com.mydb.common.beans.CMDMsg;
 import com.mydb.common.beans.Consts;
-import com.mydb.common.beans.DBException;
 import com.mydb.server.store.MyStore;
 import static com.mydb.common.beans.DBConfigs.*;
-
 import org.rocksdb.RocksDBException;
 
 public class DropColumnFamilyModel extends BaseModel{

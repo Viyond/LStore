@@ -12,7 +12,6 @@
 
 	<groupId>mydb-example</groupId>
 	<artifactId>mydb-example</artifactId>
-	<version>${application.version}</version>
 	<name>mydb-example</name>
 	<url>http://maven.apache.org</url>
 
@@ -24,7 +23,6 @@
 		<dependency>
 			<groupId>mydb-client</groupId>
 			<artifactId>mydb-client</artifactId>
-			<version>${application.version}</version>
 		</dependency>
 	</dependencies>
 </project>

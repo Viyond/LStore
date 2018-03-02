@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.mydb.client.command.Command;
 import com.mydb.client.nio.IOClient;
 
+@SuppressWarnings("all")
 public class TestScanFromBeginToEnd {
 	
 	private static AtomicInteger ind=new AtomicInteger(0);
@@ -25,7 +26,7 @@ public class TestScanFromBeginToEnd {
 					size+=list.size();
 					do{
 						ind.incrementAndGet();
-						list=Command.scan(lastKey,10000,true,"cc12");
+						list=Command.scan(lastKey,10000,true,"default");
 						if(list.size()==10000){
 							lastKey=list.get(list.size()-1).keySet().iterator().next();
 						}else{

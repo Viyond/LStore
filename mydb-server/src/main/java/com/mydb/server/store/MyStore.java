@@ -41,6 +41,8 @@ public class MyStore {
 		final DBOptions options = new DBOptions();
 		options.setCreateIfMissing(true);
 		options.setCreateMissingColumnFamilies(true);
+		//threads to run background jobs
+		options.setMaxBackgroundJobs(Configs.getInteger("background.jobs",4));
 		try {
 			long begin=System.currentTimeMillis();
 			String db_path=Configs.get("dbpath");

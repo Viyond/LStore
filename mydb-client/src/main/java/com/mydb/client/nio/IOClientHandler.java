@@ -1,7 +1,5 @@
 package com.mydb.client.nio;
 
-import java.util.concurrent.TimeUnit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.client.dispatch.CMDDispatcher;
@@ -10,7 +8,6 @@ import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
 import com.mydb.common.nio.IOMsgOuterClass.IOMsg;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 public class IOClientHandler extends SimpleChannelInboundHandler<IOMsg>{

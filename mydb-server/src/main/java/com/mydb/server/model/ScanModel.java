@@ -9,7 +9,6 @@ import com.mydb.common.beans.Tools;
 import com.mydb.common.beans.Words;
 import com.mydb.server.store.MyStore;
 import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 import static com.mydb.common.beans.DBConfigs.*;
 
 public class ScanModel extends BaseModel{
