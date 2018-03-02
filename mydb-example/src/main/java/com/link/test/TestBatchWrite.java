@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.mydb.client.command.Command;
 import com.mydb.client.nio.IOClient;
 
-public class TestWrite {
+public class TestBatchWrite {
 	
 	public static AtomicInteger ind=new AtomicInteger(0);
 	

@@ -1,28 +1,25 @@
 package com.link.test;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.mydb.client.command.Command;
 import com.mydb.client.nio.IOClient;
 
-public class TestRandomScan {
+public class TestSingleWrite {
 	
-	private static AtomicInteger ind=new AtomicInteger(0);
-	private static Random ran=new Random();
+	public static AtomicInteger ind=new AtomicInteger(0),seed=new AtomicInteger(0);
 	
 	public static void main(String[] args) {
-		//String[] str=new String[]{"1234","234","23423","23232","234234","234234"};
-		for(int i=0;i<50;i++){
+		
+		for(int i=0;i<100;i++){
 			new Thread(new Runnable() {
 				@Override
-				public void run() {
+				public void run() {                                                                      
 					for(;;){
-						String key=Long.toHexString(ran.nextInt(Integer.MAX_VALUE));
-						//String key=str[ran.nextInt(str.length-1)];
-						//System.out.println(key+":"+Command.scan(key,20));
-						Command.scan(key,10,"cc"+ran.nextInt(20));
+						int sed=seed.incrementAndGet();
+						Command.set("tttt"+sed, UUID.randomUUID().toString()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID()+UUID.randomUUID());
 						ind.incrementAndGet();
 					}
 				}

@@ -15,15 +15,14 @@ public class TestSequentialScan {
 	private static Random ran=new Random();
 	
 	public static void main(String[] args) {
-		for(int i=0;i<500;i++){
+		for(int i=0;i<80;i++){
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					String key=Long.toHexString(ran.nextInt(Integer.MAX_VALUE));
 					String cf="cc"+ran.nextInt(20);
 					for(;;){
-						List<Map<String, Object>> list=Command.scan(key,1,cf);
-						System.out.println(list);
+						List<Map<String, Object>> list=Command.scan(key,2,cf);
 						key=list.get(list.size()-1).keySet().iterator().next();
 						ind.incrementAndGet();
 					}

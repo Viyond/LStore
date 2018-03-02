@@ -86,8 +86,8 @@ public class ClientCmdExecutor implements Runnable{
 			if(resultLock!=null){
 				resultLock.add(result);
 			}
-			//如果放入失败,则先拿取在放入
 		}catch(IllegalStateException e){
+			//如果放入失败,则先拿取在放入
 			resultLock.poll();
 			resultLock.add(result);
 		}

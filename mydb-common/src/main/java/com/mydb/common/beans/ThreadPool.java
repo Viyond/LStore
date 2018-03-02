@@ -2,7 +2,6 @@ package com.mydb.common.beans;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class ThreadPool {
 	private final ExecutorService exe=Executors.newFixedThreadPool(Configs.getInteger("app.thread.size"));

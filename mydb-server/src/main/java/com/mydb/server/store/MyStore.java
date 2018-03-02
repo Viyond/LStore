@@ -41,6 +41,8 @@ public class MyStore {
 		final DBOptions options = new DBOptions();
 		options.setCreateIfMissing(true);
 		options.setCreateMissingColumnFamilies(true);
+		//threads to run background jobs
+		options.setMaxBackgroundJobs(Configs.getInteger("background.jobs",4));
 		try {
 			long begin=System.currentTimeMillis();
 			String db_path=Configs.get("dbpath");
@@ -79,6 +81,7 @@ public class MyStore {
 				return name.startsWith("OPTIONS-");
 			}
 		});
+		opfiles=opfiles==null?new File[0]:opfiles;
 		Set<String> columns=new HashSet<>();
 		for(File opf : opfiles){
 			BufferedReader reader=null;
@@ -102,6 +105,10 @@ public class MyStore {
 					e.printStackTrace();
 				}
 			}
+		}
+		//防止目录不存在时报异常
+		if(columns.size()==0){
+			columns.add("default");
 		}
 		List<ColumnFamilyDescriptor> list=new ArrayList<>(columns.size());
 		for(String s : columns){

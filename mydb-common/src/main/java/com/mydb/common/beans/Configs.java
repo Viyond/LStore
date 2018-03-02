@@ -25,8 +25,8 @@ public class Configs {
 		try {
 			prop.load(new FileInputStream("./conf/config.properties"));
 		} catch (IOException e) {
-			log.error("config loading failed!");
-			log.error("",e);
+			log.error("config loading failed,can not find config.properties in path :./conf/");
+			System.exit(0);
 		}
 	}
 	

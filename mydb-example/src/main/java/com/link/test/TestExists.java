@@ -1,23 +1,53 @@
 package com.link.test;
 
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 import com.mydb.client.command.Command;
+import com.mydb.client.nio.IOClient;
 
+@SuppressWarnings("all")
 public class TestExists {
-	public static void main(String[] args) throws InterruptedException {
-		for(int i=0;i<1;i++){
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for(;;){
-						try {
-							System.out.println(Command.exists("00000007-03ea-4db0-8987-cf27a470d52c"));
-							Thread.sleep(200);
-						} catch (Throwable e) {
-							System.out.println("err");
+		private static AtomicInteger ind=new AtomicInteger(0);
+		private static Random ran=new Random();
+		
+		public static void main(String[] args) {
+			for(int i=0;i<20;i++){
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						for(;;){
+							try {
+								Long lon=ran.nextLong();
+								String key=Long.toHexString(lon);
+								Command.exists(key);
+								//System.out.println(key+"\t"+Command.exists(key,"cc2"));
+								ind.incrementAndGet();
+							} catch (Throwable e) {
+								System.out.println("err");
+							}
 						}
 					}
+				}).start();
+			}
+			
+			new Timer().schedule(new TimerTask() {
+	    		int t=ind.get();
+				@Override
+				public void run() {
+					int tt=ind.get();
+					System.out.println("QPS:"+(tt-t));
+					t=tt;
 				}
-			}).start();
+			}, 1000,1000);
+	    	
+	    	//shutdown hook
+	    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					IOClient.group.shutdownGracefully();
+				}
+			}));
 		}
-	}
 }

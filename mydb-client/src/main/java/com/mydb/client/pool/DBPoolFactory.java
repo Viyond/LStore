@@ -10,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mydb.client.nio.IOClient;
 import com.mydb.client.session.ServerSessions;
-import com.mydb.common.beans.Consts;
 import com.mydb.common.beans.DBException;
-import com.mydb.common.beans.MsgBuilder;
-
 import io.netty.channel.ChannelHandlerContext;
 
 /**
@@ -109,6 +106,5 @@ public class DBPoolFactory implements PooledObjectFactory<CtxResource>{
 		String id=p.getObject().getCtx().channel().id().asShortText();
 		ServerSessions.resultCommandMap.remove(id);
 		p.getObject().getResultLock().poll();
-		p.getObject().getRunLock().poll();
 	}
 }

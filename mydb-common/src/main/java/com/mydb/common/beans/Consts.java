@@ -18,28 +18,30 @@ public interface Consts {
 		 * 1000-9999 APPLICATION
 		 */
 		public int SET=1000,GET=1001,MSET=1002,MGET=1003,DEL=1004,SCAN=1005,DELRANGE=1006,INFO=1007,CFS=1008,DROPCF=1009,EXISTS=1010;
-		public BitSet CMDS=new BitSet(){{
-			set(UNDONE);
-			set(DONE);
-			set(RUN);
-			set(TO_AUTH);
-			set(AUTH);
-			set(AUTH_SUCCESS);
-			set(AUTH_FAIL);
-			set(AUTH_DELAY);
-			
-			set(SET);
-			set(GET);
-			set(MSET);
-			set(MGET);
-			set(DEL);
-			set(SCAN);
-			set(DELRANGE);
-			set(INFO);
-			set(CFS);
-			set(DROPCF);
-			set(EXISTS);
-		}};
+		public BitSet CMDS=new BitSet(){
+			private static final long serialVersionUID = 1L;{
+				set(UNDONE);
+				set(DONE);
+				set(RUN);
+				set(TO_AUTH);
+				set(AUTH);
+				set(AUTH_SUCCESS);
+				set(AUTH_FAIL);
+				set(AUTH_DELAY);
+				
+				set(SET);
+				set(GET);
+				set(MSET);
+				set(MGET);
+				set(DEL);
+				set(SCAN);
+				set(DELRANGE);
+				set(INFO);
+				set(CFS);
+				set(DROPCF);
+				set(EXISTS);
+			}
+		};
 	}
 	
 	public interface TYPE{
