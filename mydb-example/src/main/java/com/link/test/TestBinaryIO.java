@@ -27,7 +27,7 @@ public class TestBinaryIO {
 	}
 	
 	public static void write() throws IOException{
-		InputStream io=new FileInputStream("D:/Images/2018012939917108.png");
+		InputStream io=new FileInputStream("D:/Images/gamersky_05origin_09_201711181746C92.jpg");
 		ByteArrayOutputStream os=new ByteArrayOutputStream();
 		byte[] b=new byte[2048];
 		while(io.read(b)!=-1){

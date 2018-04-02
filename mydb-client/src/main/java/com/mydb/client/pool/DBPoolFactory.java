@@ -57,7 +57,6 @@ public class DBPoolFactory implements PooledObjectFactory<CtxResource>{
 		}).start();
 		ChannelHandlerContext ctx=loginQuee.poll(logtimeout,TimeUnit.SECONDS);
 		if(ctx==null){
-			//这里不能抛出异常,否则会导致断线重连失败时不断尝试创建链接的问题
 			throw new DBException("获取链接失败:"+IOClient.host+":"+IOClient.port);
 		}
 		log.debug(ctx.channel().id().asShortText()+"\t created");
