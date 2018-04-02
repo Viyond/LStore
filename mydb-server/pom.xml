@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>mydb</groupId>
 		<artifactId>mydb</artifactId>
-		<version>${application.version}</version>
+		<version>0.0.1</version>
 	</parent>
 	
 	<groupId>mydb-server</groupId>

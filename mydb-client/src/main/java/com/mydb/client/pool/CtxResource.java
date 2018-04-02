@@ -34,12 +34,12 @@ public class CtxResource {
 	
 	public void release(){
 		try{
-			ctx.close();
+			ctx.channel().close();
 		}catch(Throwable e){
 			e.printStackTrace();
 		}
 		try{
-			ctx.channel().close();
+			ctx.close();
 		}catch(Throwable e){
 			e.printStackTrace();
 		}
